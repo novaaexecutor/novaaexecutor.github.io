@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Nova Executor — Changelog</title>
+<link rel="stylesheet" href="style.css">
+<style>
+.clist{display:flex;flex-direction:column;gap:2px;margin-top:56px}
+.ce{border:1px solid var(--b);background:var(--bg2);overflow:hidden;transition:border-color .2s}
+.ce:first-child{border-radius:16px 16px 0 0}.ce:last-child{border-radius:0 0 16px 16px}
+.ce.open{border-color:rgba(110,80,255,.32)}
+.ceh{display:flex;align-items:center;justify-content:space-between;padding:22px 28px;cursor:none;transition:background .2s}
+.ceh:hover{background:rgba(110,80,255,.04)}
+.cel{display:flex;align-items:center;gap:16px}
+.cev{font-family:'Syne',sans-serif;font-size:24px;font-weight:800;color:var(--acc);min-width:70px}
+.chip{padding:3px 10px;border-radius:100px;font-family:'Space Mono',monospace;font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;border:1px solid}
+.chip.la{background:rgba(200,255,0,.08);color:var(--accy);border-color:rgba(200,255,0,.3)}
+.chip.st{background:rgba(0,232,122,.08);color:var(--green);border-color:rgba(0,232,122,.25)}
+.chip.ol{background:rgba(60,60,90,.3);color:var(--muted);border-color:var(--dim)}
+.ced{font-family:'Space Mono',monospace;font-size:11px;color:var(--muted)}
+.chev{color:var(--muted);font-size:11px;transition:transform .3s}
+.ce.open .chev{transform:rotate(180deg);color:var(--acc)}
+.cb{max-height:0;overflow:hidden;transition:max-height .45s ease}
+.ce.open .cb{max-height:700px}
+.cbi{padding:0 28px 24px;border-top:1px solid var(--dim)}
+.cch{display:flex;flex-direction:column;gap:9px;margin-top:16px}
+.cc{display:flex;align-items:flex-start;gap:11px;font-size:13px;color:var(--text2);line-height:1.6}
+.ct{padding:2px 9px;border-radius:5px;font-size:9px;font-weight:700;font-family:'Space Mono',monospace;letter-spacing:.5px;flex-shrink:0;margin-top:2px;border:1px solid}
+.ct.add{background:rgba(0,232,122,.1);color:var(--green);border-color:rgba(0,232,122,.25)}
+.ct.fix{background:rgba(255,184,0,.1);color:var(--gold);border-color:rgba(255,184,0,.25)}
+.ct.imp{background:rgba(110,80,255,.1);color:var(--acc);border-color:rgba(110,80,255,.25)}
+.ct.rem{background:rgba(255,59,92,.1);color:var(--red);border-color:rgba(255,59,92,.25)}
+</style>
+</head>
+<body>
+<canvas id="bgc"></canvas>
+<div id="cd"></div><div id="cr"></div>
+<nav id="nav">
+  <a href="welcome.html" class="nl"><div class="nn">N</div><span class="nw">Nova</span></a>
+  <ul class="nlinks">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="features.html">Features</a></li>
+    <li><a href="changelog.html">Changelog</a></li>
+    <li><a href="download.html">Download</a></li>
+  </ul>
+  <a href="https://www.youtube.com/@Lmaosbros" target="_blank" rel="noopener" class="nyt">
+    <svg width="13" height="13" viewBox="0 0 24 24"><path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.5 12 3.5 12 3.5s-7.5 0-9.4.6A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.6 9.4.6 9.4.6s7.5 0 9.4-.6a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8zM9.75 15.5V8.5l6.25 3.5-6.25 3.5z" fill="currentColor"/></svg>
+    YouTube
+  </a>
+</nav>
+
+<div class="page-wrap">
+  <div class="ey rv">Changelog</div>
+  <h1 class="page-title rv">RELEASE<br><span>HISTORY</span></h1>
+
+  <div class="clist rv">
+    <div class="ce open">
+      <div class="ceh"><div class="cel"><div class="cev">v8.0</div><span class="chip la">Latest</span><span class="ced">Mar 2025</span></div><span class="chev">▼</span></div>
+      <div class="cb"><div class="cbi"><div class="cch">
+        <div class="cc"><span class="ct add">ADD</span><span>Complete UI rewrite — full pitch-black (#000) theme, Nova branding, glowing N logo</span></div>
+        <div class="cc"><span class="ct add">ADD</span><span>Script Hub overhaul — bigger cards, cloud ☁ load button, better image rendering</span></div>
+        <div class="cc"><span class="ct add">ADD</span><span>Python bootstrapper with animated tkinter GUI, particles, Defender whitelist, auto-updater</span></div>
+        <div class="cc"><span class="ct add">ADD</span><span>Line numbers panel in editor — synced with scroll</span></div>
+        <div class="cc"><span class="ct imp">IMP</span><span>More vivid accent palette (#6E50FF → #A05AFF) with stronger glow on all elements</span></div>
+        <div class="cc"><span class="ct imp">IMP</span><span>PillBtn rounder corners, sharper hover glow, improved gradient rendering</span></div>
+        <div class="cc"><span class="ct fix">FIX</span><span>Autoexec folder path updated to match Nova branding</span></div>
+        <div class="cc"><span class="ct fix">FIX</span><span>weao version display shortened, removed long hash strings</span></div>
+      </div></div></div>
+    </div>
+    <div class="ce">
+      <div class="ceh"><div class="cel"><div class="cev">v7.0</div><span class="chip st">Stable</span><span class="ced">Jan 2025</span></div><span class="chev">▼</span></div>
+      <div class="cb"><div class="cbi"><div class="cch">
+        <div class="cc"><span class="ct add">ADD</span><span>Script Hub with live ScriptBlox.com API — Trending &amp; Latest tabs</span></div>
+        <div class="cc"><span class="ct add">ADD</span><span>Multi-tab system with close/add buttons and script persistence</span></div>
+        <div class="cc"><span class="ct add">ADD</span><span>Animated toast notification system (fade in/out, colored variants)</span></div>
+        <div class="cc"><span class="ct add">ADD</span><span>weao.gg version check — compares local Roblox build against live API</span></div>
+        <div class="cc"><span class="ct fix">FIX</span><span>ScriptCard image loading race condition resolved</span></div>
+      </div></div></div>
+    </div>
+    <div class="ce">
+      <div class="ceh"><div class="cel"><div class="cev">v6.0</div><span class="chip ol">Old</span><span class="ced">Oct 2024</span></div><span class="chev">▼</span></div>
+      <div class="cb"><div class="cbi"><div class="cch">
+        <div class="cc"><span class="ct add">ADD</span><span>Auto Executor — folder watcher runs scripts automatically on every inject</span></div>
+        <div class="cc"><span class="ct add">ADD</span><span>Settings page with animated toggle switches</span></div>
+        <div class="cc"><span class="ct imp">IMP</span><span>Sidebar navigation with animated active indicator</span></div>
+        <div class="cc"><span class="ct fix">FIX</span><span>Window drag behavior while maximized</span></div>
+      </div></div></div>
+    </div>
+    <div class="ce">
+      <div class="ceh"><div class="cel"><div class="cev">v5.0</div><span class="chip ol">Old</span><span class="ced">Jul 2024</span></div><span class="chev">▼</span></div>
+      <div class="cb"><div class="cbi"><div class="cch">
+        <div class="cc"><span class="ct add">ADD</span><span>Maximize/restore with double-click title bar</span></div>
+        <div class="cc"><span class="ct add">ADD</span><span>Custom resize grip in bottom-right corner</span></div>
+        <div class="cc"><span class="ct rem">REM</span><span>Legacy injection replaced with VelocityAPI v2</span></div>
+      </div></div></div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="fl"><div class="fn2">N</div><div><div class="fname2">NOVA EXECUTOR</div><div class="fcopy">© 2025 · v8.0 · Free Forever</div></div></div>
+  <ul class="flinks">
+    <li><a href="features.html">Features</a></li>
+    <li><a href="changelog.html">Changelog</a></li>
+    <li><a href="download.html">Download</a></li>
+    <li><a href="https://www.youtube.com/@Lmaosbros" target="_blank">YouTube</a></li>
+  </ul>
+</footer>
+<script src="app.js"></script>
+</body>
+</html>

@@ -1,63 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
-<meta name="description" content="Nova Executor — Fast attach. Clean GUI. Free forever. No key system.">
-<title>Nova Executor</title>
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Space+Mono:wght@400;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Nova Executor — Home</title>
+<link rel="stylesheet" href="style.css">
 <style>
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-:root{
-  --bg:#000;--bg1:#05050a;--bg2:#0a0a12;--bg3:#101018;--dim:#1a1a2e;
-  --b:rgba(110,80,255,.12);--b2:rgba(110,80,255,.28);
-  --acc:#6e50ff;--acch:#a05aff;--accy:#c8ff00;
-  --text:#eeeeff;--text2:#9090b8;--muted:#303050;
-  --green:#00e87a;--red:#ff3b5c;--gold:#ffb800;
-}
-html{scroll-behavior:smooth}
-body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;overflow-x:hidden;cursor:none}
-::selection{background:rgba(110,80,255,.35)}
-::-webkit-scrollbar{width:3px}
-::-webkit-scrollbar-track{background:var(--bg)}
-::-webkit-scrollbar-thumb{background:var(--acc);border-radius:2px}
-
-/* CURSOR */
-#cd{position:fixed;width:8px;height:8px;background:var(--acc);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);mix-blend-mode:screen;transition:width .15s,height .15s,background .15s}
-#cr{position:fixed;width:30px;height:30px;border:1.5px solid rgba(110,80,255,.45);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%)}
-body.ch #cd{width:16px;height:16px;background:var(--acch)}
-body.ch #cr{opacity:.35}
-
-canvas{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:0;opacity:.85}
-
-/* NAV */
-nav{position:fixed;top:0;left:0;right:0;z-index:500;display:flex;align-items:center;justify-content:space-between;padding:0 56px;height:66px;transition:all .3s;background:linear-gradient(to bottom,rgba(0,0,0,.9),transparent)}
-nav.sc{background:rgba(0,0,0,.94)!important;backdrop-filter:blur(18px);border-bottom:1px solid rgba(110,80,255,.09)}
-.nl{display:flex;align-items:center;gap:12px;text-decoration:none;cursor:none}
-.nn{width:36px;height:36px;border-radius:9px;background:linear-gradient(135deg,var(--acc),var(--acch));display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-size:18px;font-weight:800;color:#fff;box-shadow:0 0 22px rgba(110,80,255,.5);transition:all .2s;flex-shrink:0}
-.nl:hover .nn{box-shadow:0 0 44px rgba(110,80,255,.85);transform:scale(1.07)}
-.nw{font-family:'Syne',sans-serif;font-size:17px;font-weight:800;letter-spacing:2px;color:var(--text);text-transform:uppercase}
-.nlinks{display:flex;align-items:center;gap:34px;list-style:none}
-.nlinks a{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);text-decoration:none;position:relative;transition:color .2s;cursor:none}
-.nlinks a::after{content:'';position:absolute;bottom:-3px;left:0;right:0;height:1px;background:var(--acc);transform:scaleX(0);transform-origin:left;transition:transform .25s}
-.nlinks a:hover,.nlinks a.act{color:var(--text)}
-.nlinks a:hover::after,.nlinks a.act::after{transform:scaleX(1)}
-.nyt{display:flex;align-items:center;gap:8px;padding:7px 16px;border-radius:8px;border:1px solid rgba(255,59,59,.3);color:#ff5555;font-family:'Space Mono',monospace;font-size:9px;letter-spacing:1px;text-transform:uppercase;text-decoration:none;cursor:none;background:rgba(255,59,59,.06);transition:all .2s}
-.nyt:hover{border-color:#ff5555;background:rgba(255,59,59,.14);color:#ff8888}
-.nyt svg{width:13px;height:13px}
-
-section{position:relative;z-index:2}
-.ey{display:inline-flex;align-items:center;gap:8px;font-family:'Space Mono',monospace;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--acc);margin-bottom:18px}
-.ey::before{content:'//';opacity:.5}
-
-.rv{opacity:0;transform:translateY(32px);transition:opacity .7s ease,transform .7s ease}
-.rv.on{opacity:1;transform:none}
-.rvl{opacity:0;transform:translateX(-32px);transition:opacity .7s ease,transform .7s ease}
-.rvl.on{opacity:1;transform:none}
-.rvr{opacity:0;transform:translateX(32px);transition:opacity .7s ease,transform .7s ease}
-.rvr.on{opacity:1;transform:none}
-
-/* HERO */
 #hero{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:120px 24px 100px;overflow:hidden}
 .hbadge{display:inline-flex;align-items:center;gap:10px;border:1px solid rgba(200,255,0,.3);border-radius:100px;padding:6px 18px;margin-bottom:46px;font-family:'Space Mono',monospace;font-size:10px;color:var(--accy);letter-spacing:2px;text-transform:uppercase;background:rgba(200,255,0,.05);animation:fadeDown .8s ease both}
 .bl{width:6px;height:6px;border-radius:50%;background:var(--accy);animation:blink 1.4s ease infinite;flex-shrink:0}
@@ -66,376 +13,64 @@ section{position:relative;z-index:2}
 .htitle .t2{display:block;background:linear-gradient(100deg,var(--acc) 0%,var(--acch) 45%,var(--accy) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;filter:drop-shadow(0 0 55px rgba(110,80,255,.45))}
 .hsub{max-width:460px;margin:34px auto 50px;font-size:16px;font-weight:300;color:var(--text2);line-height:1.8;animation:fadeUp .8s .2s ease both}
 .hacts{display:flex;align-items:center;gap:16px;flex-wrap:wrap;justify-content:center;animation:fadeUp .8s .3s ease both}
-
-/* BUTTONS */
-.bdl{position:relative;overflow:hidden;display:inline-flex;align-items:center;gap:10px;padding:16px 38px;border-radius:13px;background:linear-gradient(135deg,var(--acc),var(--acch));color:#fff;font-family:'Syne',sans-serif;font-size:14px;font-weight:800;text-decoration:none;cursor:none;box-shadow:0 0 50px rgba(110,80,255,.4),inset 0 1px 0 rgba(255,255,255,.18);transition:transform .2s,box-shadow .2s;letter-spacing:.3px}
-.bdl:hover{transform:translateY(-3px);box-shadow:0 0 80px rgba(110,80,255,.65),inset 0 1px 0 rgba(255,255,255,.18)}
-.bdl::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,var(--acch),var(--acc));opacity:0;transition:opacity .2s}
-.bdl:hover::before{opacity:1}
-.bdl span{position:relative;z-index:1}
-.bol{display:inline-flex;align-items:center;gap:8px;padding:16px 26px;border-radius:13px;border:1px solid var(--b2);color:var(--text2);font-family:'Space Mono',monospace;font-size:11px;letter-spacing:1px;text-transform:uppercase;text-decoration:none;cursor:none;background:rgba(255,255,255,.02);transition:all .2s}
-.bol:hover{border-color:rgba(110,80,255,.5);color:var(--text);background:rgba(110,80,255,.07)}
-
-/* STATS */
 .hstats{display:flex;margin-top:78px;border:1px solid var(--b);border-radius:16px;overflow:hidden;background:rgba(255,255,255,.015);animation:fadeUp .8s .4s ease both;backdrop-filter:blur(12px)}
 .hs{flex:1;padding:22px 32px;text-align:center;border-right:1px solid var(--b);transition:background .25s}
 .hs:last-child{border-right:none}
 .hs:hover{background:rgba(110,80,255,.07)}
 .hsv{font-family:'Syne',sans-serif;font-size:30px;font-weight:800;background:linear-gradient(135deg,var(--text),var(--accy));-webkit-background-clip:text;-webkit-text-fill-color:transparent;line-height:1}
 .hsl{font-family:'Space Mono',monospace;font-size:9px;color:var(--muted);letter-spacing:2px;text-transform:uppercase;margin-top:6px}
-
-/* TICKER */
-.tw{position:relative;z-index:2;border-top:1px solid var(--dim);border-bottom:1px solid var(--dim);overflow:hidden;padding:13px 0;background:var(--bg1)}
-.tt{display:flex;animation:ticker 28s linear infinite;width:max-content}
-.tr{animation-direction:reverse;animation-duration:22s}
-.ti{white-space:nowrap;padding:0 48px;font-family:'Space Mono',monospace;font-size:10px;color:var(--muted);letter-spacing:2px;text-transform:uppercase;display:flex;align-items:center;gap:14px}
-.s{color:var(--acc)}
-
-/* FEATURES */
-#features{padding:120px 0}
-.fi{max-width:1300px;margin:0 auto;padding:0 56px}
-.fh{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:64px;flex-wrap:wrap;gap:24px}
-.fht{font-family:'Syne',sans-serif;font-size:clamp(38px,5.5vw,78px);font-weight:800;line-height:.95;letter-spacing:-1px}
-.fht span{color:var(--acc)}
-.fhs{font-size:14px;color:var(--text2);max-width:260px;line-height:1.7;text-align:right}
-.fg{display:grid;grid-template-columns:repeat(3,1fr);gap:2px}
-.fc{position:relative;overflow:hidden;background:var(--bg2);border:1px solid var(--b);padding:38px 34px 34px;cursor:none;transition:border-color .3s,transform .4s cubic-bezier(.22,1,.36,1),box-shadow .4s}
-.fc:nth-child(1){border-radius:20px 0 0 0}
-.fc:nth-child(3){border-radius:0 20px 0 0}
-.fc:nth-child(4){border-radius:0 0 0 20px}
-.fc:nth-child(6){border-radius:0 0 20px 0}
-.fc.w{grid-column:span 2}
-.fc::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at var(--mx,50%) var(--my,50%),rgba(110,80,255,.13) 0%,transparent 60%);opacity:0;transition:opacity .4s;pointer-events:none}
-.fc:hover{border-color:rgba(110,80,255,.38);box-shadow:0 18px 70px rgba(0,0,0,.6);transform:translateY(-4px) scale(1.005)}
-.fc:hover::before{opacity:1}
-.fc::after{content:'';position:absolute;top:0;left:0;width:55px;height:3px;background:linear-gradient(90deg,var(--acc),transparent);transform:scaleX(0);transform-origin:left;transition:transform .35s}
-.fc:hover::after{transform:scaleX(1)}
-.fn{font-family:'Space Mono',monospace;font-size:9px;color:var(--muted);letter-spacing:2px;margin-bottom:26px}
-.fi2{width:50px;height:50px;border-radius:12px;background:rgba(110,80,255,.1);border:1px solid rgba(110,80,255,.2);display:flex;align-items:center;justify-content:center;font-size:22px;margin-bottom:22px;transition:all .3s}
-.fc:hover .fi2{background:rgba(110,80,255,.22);box-shadow:0 0 26px rgba(110,80,255,.35);transform:scale(1.1)}
-.fname{font-family:'Syne',sans-serif;font-size:19px;font-weight:700;margin-bottom:10px;color:var(--text)}
-.fdesc{font-size:14px;color:var(--text2);line-height:1.7;font-weight:300}
-.ftag{display:inline-block;margin-top:16px;padding:4px 12px;border-radius:100px;font-family:'Space Mono',monospace;font-size:9px;letter-spacing:1px;background:rgba(110,80,255,.1);color:var(--acc);border:1px solid rgba(110,80,255,.2)}
-
-/* YOUTUBE */
-#yts{padding:0 0 80px}
-.yi{max-width:1300px;margin:0 auto;padding:0 56px}
-.yc{position:relative;overflow:hidden;background:var(--bg2);border:1px solid var(--b);border-radius:20px;padding:52px 60px;display:flex;align-items:center;gap:56px;flex-wrap:wrap}
-.yc::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,#ff3b3b,#ff6060,transparent)}
-.yc::after{content:'';position:absolute;right:-80px;top:-80px;width:300px;height:300px;border-radius:50%;background:radial-gradient(ellipse,rgba(255,59,59,.06) 0%,transparent 70%);pointer-events:none}
-.yico{width:76px;height:76px;border-radius:18px;flex-shrink:0;background:rgba(255,59,59,.12);border:1px solid rgba(255,59,59,.3);display:flex;align-items:center;justify-content:center;transition:all .3s}
-.yc:hover .yico{background:rgba(255,59,59,.22);box-shadow:0 0 40px rgba(255,59,59,.3)}
-.yico svg{width:34px;height:34px;fill:#ff4444}
-.ytx{flex:1;min-width:200px}
-.ylb{font-family:'Space Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#ff5555;margin-bottom:10px}
-.yt2{font-family:'Syne',sans-serif;font-size:30px;font-weight:800;margin-bottom:10px}
-.yd{font-size:14px;color:var(--text2);font-weight:300;line-height:1.7}
-.byt{display:inline-flex;align-items:center;gap:10px;padding:14px 30px;border-radius:12px;background:linear-gradient(135deg,#cc2222,#ff4444);color:#fff;font-family:'Syne',sans-serif;font-size:13px;font-weight:700;text-decoration:none;cursor:none;flex-shrink:0;box-shadow:0 0 40px rgba(255,59,59,.3);transition:all .2s}
-.byt:hover{transform:translateY(-2px);box-shadow:0 0 60px rgba(255,59,59,.55)}
-.byt svg{width:16px;height:16px;fill:#fff}
-
-/* CHANGELOG */
-#changelog{padding:80px 0 100px}
-.ci{max-width:1300px;margin:0 auto;padding:0 56px}
-.chr{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:52px;flex-wrap:wrap;gap:16px}
-.cht{font-family:'Syne',sans-serif;font-size:clamp(38px,5vw,70px);font-weight:800;letter-spacing:-1px;line-height:.95}
-.cht span{color:var(--acc)}
-.clist{display:flex;flex-direction:column;gap:2px}
-.ce{border:1px solid var(--b);background:var(--bg2);overflow:hidden;transition:border-color .2s}
-.ce:first-child{border-radius:16px 16px 0 0}
-.ce:last-child{border-radius:0 0 16px 16px}
-.ce.open{border-color:rgba(110,80,255,.32)}
-.ceh{display:flex;align-items:center;justify-content:space-between;padding:22px 28px;cursor:none;transition:background .2s}
-.ceh:hover{background:rgba(110,80,255,.04)}
-.cel{display:flex;align-items:center;gap:16px}
-.cev{font-family:'Syne',sans-serif;font-size:24px;font-weight:800;color:var(--acc);min-width:70px}
-.chip2{padding:3px 10px;border-radius:100px;font-family:'Space Mono',monospace;font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;border:1px solid}
-.chip2.la{background:rgba(200,255,0,.08);color:var(--accy);border-color:rgba(200,255,0,.3)}
-.chip2.st{background:rgba(0,232,122,.08);color:var(--green);border-color:rgba(0,232,122,.25)}
-.chip2.ol{background:rgba(60,60,90,.3);color:var(--muted);border-color:var(--dim)}
-.ced{font-family:'Space Mono',monospace;font-size:11px;color:var(--muted)}
-.chev{color:var(--muted);font-size:11px;transition:transform .3s}
-.ce.open .chev{transform:rotate(180deg);color:var(--acc)}
-.cb{max-height:0;overflow:hidden;transition:max-height .45s ease}
-.ce.open .cb{max-height:600px}
-.cbi{padding:0 28px 24px;border-top:1px solid var(--dim)}
-.cch{display:flex;flex-direction:column;gap:9px;margin-top:16px}
-.cc{display:flex;align-items:flex-start;gap:11px;font-size:13px;color:var(--text2);line-height:1.6}
-.ct{padding:2px 9px;border-radius:5px;font-size:9px;font-weight:700;font-family:'Space Mono',monospace;letter-spacing:.5px;flex-shrink:0;margin-top:2px;border:1px solid}
-.ct.add{background:rgba(0,232,122,.1);color:var(--green);border-color:rgba(0,232,122,.25)}
-.ct.fix{background:rgba(255,184,0,.1);color:var(--gold);border-color:rgba(255,184,0,.25)}
-.ct.imp{background:rgba(110,80,255,.1);color:var(--acc);border-color:rgba(110,80,255,.25)}
-.ct.rem{background:rgba(255,59,92,.1);color:var(--red);border-color:rgba(255,59,92,.25)}
-
-/* DOWNLOAD */
-#download{padding:120px 56px;position:relative;overflow:hidden;text-align:center}
-.dg{position:absolute;bottom:-200px;left:50%;transform:translateX(-50%);width:800px;height:800px;border-radius:50%;pointer-events:none;background:radial-gradient(ellipse,rgba(110,80,255,.1) 0%,transparent 65%)}
-.dtl{position:absolute;top:40px;left:56px;width:110px;height:110px;border:1px solid rgba(110,80,255,.2);border-right:none;border-bottom:none;pointer-events:none}
-.dbr{position:absolute;bottom:40px;right:56px;width:110px;height:110px;border:1px solid rgba(110,80,255,.2);border-left:none;border-top:none;pointer-events:none}
-.dbig{font-family:'Syne',sans-serif;font-size:clamp(52px,9vw,118px);font-weight:800;letter-spacing:-2px;line-height:.9;margin-bottom:28px}
-.dbig span{color:var(--acc)}
-.dsub{font-size:16px;color:var(--text2);margin-bottom:52px;font-weight:300;max-width:400px;margin-left:auto;margin-right:auto;line-height:1.7}
-.dacts{display:flex;align-items:center;justify-content:center;gap:16px;flex-wrap:wrap}
-.dnote{margin-top:34px;font-family:'Space Mono',monospace;font-size:10px;color:var(--muted);letter-spacing:1px;line-height:2}
-.dnote span{color:var(--text2)}
-
-/* FOOTER */
-footer{border-top:1px solid var(--dim);padding:28px 56px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px;position:relative;z-index:2;background:var(--bg1)}
-.fl{display:flex;align-items:center;gap:12px}
-.fn2{width:28px;height:28px;border-radius:7px;background:linear-gradient(135deg,var(--acc),var(--acch));display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-size:14px;font-weight:800;color:#fff}
-.fname2{font-family:'Syne',sans-serif;font-size:12px;font-weight:700;letter-spacing:1px}
-.fcopy{font-family:'Space Mono',monospace;font-size:9px;color:var(--muted)}
-.flinks{display:flex;gap:22px;list-style:none}
-.flinks a{font-family:'Space Mono',monospace;font-size:9px;letter-spacing:1px;text-transform:uppercase;color:var(--muted);text-decoration:none;transition:color .2s;cursor:none}
-.flinks a:hover{color:var(--acc)}
-
-@keyframes fadeUp{from{opacity:0;transform:translateY(28px)}to{opacity:1;transform:none}}
-@keyframes fadeDown{from{opacity:0;transform:translateY(-14px)}to{opacity:1;transform:none}}
-@keyframes blink{0%,100%{opacity:1}50%{opacity:.15}}
-@keyframes ticker{from{transform:translateX(0)}to{transform:translateX(-50%)}}
-
-@media(max-width:880px){
-  nav{padding:0 20px}.nlinks{display:none}
-  .fg{grid-template-columns:1fr}
-  .fc.w,.fc:nth-child(1),.fc:nth-child(3),.fc:nth-child(4),.fc:nth-child(6){grid-column:span 1;border-radius:12px}
-  #changelog,.ci,#yts,.yi{padding-left:20px;padding-right:20px}
-  #download{padding:80px 20px}
-  .yc{padding:36px 24px;gap:24px}
-  footer{padding:20px;flex-direction:column;align-items:flex-start}
-  .hstats{flex-direction:column}.hs{border-right:none;border-bottom:1px solid var(--b)}
-  .hs:last-child{border-bottom:none}
-  .fi{padding:0 20px}.fh{padding:0}
-}
 </style>
 </head>
 <body>
-<canvas id="cv"></canvas>
-<div id="cd"></div>
-<div id="cr"></div>
+<canvas id="bgc"></canvas>
+<div id="cd"></div><div id="cr"></div>
 
 <nav id="nav">
-  <a href="#hero" class="nl">
-    <div class="nn">N</div>
-    <span class="nw">Nova</span>
-  </a>
+  <a href="welcome.html" class="nl"><div class="nn">N</div><span class="nw">Nova</span></a>
   <ul class="nlinks">
-    <li><a href="#hero" class="act">Home</a></li>
-    <li><a href="#features">Features</a></li>
-    <li><a href="#changelog">Changelog</a></li>
-    <li><a href="#download">Download</a></li>
+    <li><a href="index.html">Home</a></li>
+    <li><a href="features.html">Features</a></li>
+    <li><a href="changelog.html">Changelog</a></li>
+    <li><a href="download.html">Download</a></li>
   </ul>
   <a href="https://www.youtube.com/@Lmaosbros" target="_blank" rel="noopener" class="nyt">
-    <svg viewBox="0 0 24 24"><path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.5 12 3.5 12 3.5s-7.5 0-9.4.6A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.6 9.4.6 9.4.6s7.5 0 9.4-.6a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8zM9.75 15.5V8.5l6.25 3.5-6.25 3.5z" fill="currentColor"/></svg>
+    <svg width="13" height="13" viewBox="0 0 24 24"><path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.5 12 3.5 12 3.5s-7.5 0-9.4.6A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.6 9.4.6 9.4.6s7.5 0 9.4-.6a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8zM9.75 15.5V8.5l6.25 3.5-6.25 3.5z" fill="currentColor"/></svg>
     YouTube
   </a>
 </nav>
 
-<!-- HERO -->
 <section id="hero">
   <div class="hbadge"><span class="bl"></span><span>v8.0 — Now Available</span></div>
   <h1 class="htitle"><span class="t1">NOVA</span><span class="t2">EXECUTOR</span></h1>
   <p class="hsub">Fast attach. Clean GUI.<br>Built for speed, designed for control.<br>Free forever — no key system.</p>
   <div class="hacts">
-    <a href="https://github.com/novaaexecutor/novaexecutor/raw/refs/heads/main/NovaExecutor.zip" class="bdl"><span>↓</span><span>Download Free</span></a>
-    <a href="#changelog" class="bol">Changelog ↗</a>
-    <a href="https://www.youtube.com/@Lmaosbros" target="_blank" rel="noopener" class="bol">▶ YouTube</a>
+    <a href="download.html" class="bdl"><span>↓</span><span>Download Free</span></a>
+    <a href="features.html" class="bol">Features ↗</a>
+    <a href="changelog.html" class="bol">Changelog ↗</a>
   </div>
   <div class="hstats rv">
     <div class="hs"><div class="hsv">&lt;0.3s</div><div class="hsl">Attach Time</div></div>
     <div class="hs"><div class="hsv">UNC</div><div class="hsl">API Support</div></div>
-    <div class="hs"><div class="hsv">v8</div><div class="hsl">Current Build</div></div>
+    <div class="hs"><div class="hsv">v8</div><div class="hsl">Build</div></div>
     <div class="hs"><div class="hsv">FREE</div><div class="hsl">Always</div></div>
     <div class="hs"><div class="hsv">500k+</div><div class="hsl">Hub Scripts</div></div>
   </div>
 </section>
 
-<!-- TICKER 1 -->
 <div class="tw"><div class="tt">
-  <div class="ti"><span class="s">✦</span>Nova Executor<span class="s">✦</span>Fast Attach<span class="s">✦</span>Script Hub<span class="s">✦</span>Auto Execute<span class="s">✦</span>Multi-Tab Editor<span class="s">✦</span>UNC Support<span class="s">✦</span>Free Forever<span class="s">✦</span>ScriptBlox<span class="s">✦</span>No Key System<span class="s">✦</span>VelocityAPI<span class="s">✦</span>weao.gg</div>
-  <div class="ti"><span class="s">✦</span>Nova Executor<span class="s">✦</span>Fast Attach<span class="s">✦</span>Script Hub<span class="s">✦</span>Auto Execute<span class="s">✦</span>Multi-Tab Editor<span class="s">✦</span>UNC Support<span class="s">✦</span>Free Forever<span class="s">✦</span>ScriptBlox<span class="s">✦</span>No Key System<span class="s">✦</span>VelocityAPI<span class="s">✦</span>weao.gg</div>
+  <div class="ti"><span class="s">✦</span>Nova Executor<span class="s">✦</span>Fast Attach<span class="s">✦</span>Script Hub<span class="s">✦</span>Auto Execute<span class="s">✦</span>Multi-Tab Editor<span class="s">✦</span>UNC Support<span class="s">✦</span>Free Forever<span class="s">✦</span>ScriptBlox<span class="s">✦</span>No Key<span class="s">✦</span>VelocityAPI<span class="s">✦</span>weao.gg</div>
+  <div class="ti"><span class="s">✦</span>Nova Executor<span class="s">✦</span>Fast Attach<span class="s">✦</span>Script Hub<span class="s">✦</span>Auto Execute<span class="s">✦</span>Multi-Tab Editor<span class="s">✦</span>UNC Support<span class="s">✦</span>Free Forever<span class="s">✦</span>ScriptBlox<span class="s">✦</span>No Key<span class="s">✦</span>VelocityAPI<span class="s">✦</span>weao.gg</div>
 </div></div>
 
-<!-- FEATURES -->
-<section id="features">
-  <div class="fi">
-    <div class="fh">
-      <div><div class="ey rvl">Features</div><h2 class="fht rvl">BUILT<br>DIFFERENT<span>.</span></h2></div>
-      <p class="fhs rvr">Every feature handcrafted for Roblox power users who demand speed and reliability.</p>
-    </div>
-    <div class="fg">
-      <div class="fc w rv"><div class="fn">01</div><div class="fi2">⚡</div><div class="fname">Instant Attach</div><div class="fdesc">Sub-300ms inject times with zero lag on startup. Powered by VelocityAPI — the most reliable injection layer available. One click, instantly attached.</div><span class="ftag">VelocityAPI Powered</span></div>
-      <div class="fc rv"><div class="fn">02</div><div class="fi2">📝</div><div class="fname">Multi-Tab Editor</div><div class="fdesc">Open multiple scripts at once in a tabbed editor. Save, load, rename — full file management built in.</div><span class="ftag">Cascadia Code</span></div>
-      <div class="fc rv"><div class="fn">03</div><div class="fi2">📦</div><div class="fname">Script Hub</div><div class="fdesc">Live ScriptBlox.com integration. Browse 500k+ free scripts, search by game, load in one click.</div><span class="ftag">ScriptBlox API</span></div>
-      <div class="fc rv"><div class="fn">04</div><div class="fi2">🔁</div><div class="fname">Auto Execute</div><div class="fdesc">Drop .lua files in the autoexec folder — they run automatically on every inject.</div><span class="ftag">Folder Watcher</span></div>
-      <div class="fc rv"><div class="fn">05</div><div class="fi2">🌐</div><div class="fname">Version Checker</div><div class="fdesc">Live weao.gg API integration — always know if Roblox is up to date before attaching.</div><span class="ftag">weao.gg API</span></div>
-      <div class="fc w rv"><div class="fn">06</div><div class="fi2">🎨</div><div class="fname">Ultra Modern UI</div><div class="fdesc">Full pitch-black theme. Animated sidebar. Smooth toast notifications. Glowing accent borders. Resize and drag window. Every pixel designed intentionally.</div><span class="ftag">Custom WinForms Renderer</span></div>
-    </div>
-  </div>
-</section>
-
-<!-- TICKER 2 -->
-<div class="tw"><div class="tt tr">
-  <div class="ti"><span class="s">✦</span>No Ads<span class="s">✦</span>No Key<span class="s">✦</span>No Paywalls<span class="s">✦</span>Community Driven<span class="s">✦</span>Regular Updates<span class="s">✦</span>Windows 10/11<span class="s">✦</span>.NET 8<span class="s">✦</span>Auto Updater<span class="s">✦</span>Desktop Shortcut<span class="s">✦</span>Free Forever</div>
-  <div class="ti"><span class="s">✦</span>No Ads<span class="s">✦</span>No Key<span class="s">✦</span>No Paywalls<span class="s">✦</span>Community Driven<span class="s">✦</span>Regular Updates<span class="s">✦</span>Windows 10/11<span class="s">✦</span>.NET 8<span class="s">✦</span>Auto Updater<span class="s">✦</span>Desktop Shortcut<span class="s">✦</span>Free Forever</div>
-</div></div>
-
-<!-- YOUTUBE -->
-<section id="yts">
-  <div class="yi">
-    <div class="yc rv">
-      <div class="yico"><svg viewBox="0 0 24 24"><path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.5 12 3.5 12 3.5s-7.5 0-9.4.6A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.6 9.4.6 9.4.6s7.5 0 9.4-.6a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8zM9.75 15.5V8.5l6.25 3.5-6.25 3.5z"/></svg></div>
-      <div class="ytx">
-        <div class="ylb">YouTube Channel</div>
-        <div class="yt2">Lmaosbros</div>
-        <div class="yd">Scripts, tutorials, executor updates and more. Subscribe to stay up to date with Nova Executor releases.</div>
-      </div>
-      <a href="https://www.youtube.com/@Lmaosbros" target="_blank" rel="noopener" class="byt">
-        <svg viewBox="0 0 24 24"><path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.5 12 3.5 12 3.5s-7.5 0-9.4.6A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.6 9.4.6 9.4.6s7.5 0 9.4-.6a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8zM9.75 15.5V8.5l6.25 3.5-6.25 3.5z"/></svg>
-        Subscribe
-      </a>
-    </div>
-  </div>
-</section>
-
-<!-- CHANGELOG -->
-<section id="changelog">
-  <div class="ci">
-    <div class="chr rv"><div><div class="ey">Changelog</div><h2 class="cht">RELEASE<br><span>HISTORY</span></h2></div></div>
-    <div class="clist rv">
-      <div class="ce open">
-        <div class="ceh"><div class="cel"><div class="cev">v8.0</div><span class="chip2 la">Latest</span><span class="ced">Mar 2025</span></div><span class="chev">▼</span></div>
-        <div class="cb"><div class="cbi"><div class="cch">
-          <div class="cc"><span class="ct add">ADD</span><span>Complete UI rewrite — full pitch-black theme, Nova branding, glowing N logo</span></div>
-          <div class="cc"><span class="ct add">ADD</span><span>Script Hub overhaul — bigger cards, better image rendering, cloud load button</span></div>
-          <div class="cc"><span class="ct add">ADD</span><span>Python bootstrapper with animated GUI, particles, auto-updater, Defender whitelist</span></div>
-          <div class="cc"><span class="ct imp">IMP</span><span>More vivid accent palette with stronger glow on all interactive elements</span></div>
-          <div class="cc"><span class="ct fix">FIX</span><span>Autoexec folder path and version tag corrected</span></div>
-        </div></div></div>
-      </div>
-      <div class="ce">
-        <div class="ceh"><div class="cel"><div class="cev">v7.0</div><span class="chip2 st">Stable</span><span class="ced">Jan 2025</span></div><span class="chev">▼</span></div>
-        <div class="cb"><div class="cbi"><div class="cch">
-          <div class="cc"><span class="ct add">ADD</span><span>Script Hub with live ScriptBlox.com API — Trending &amp; Latest tabs</span></div>
-          <div class="cc"><span class="ct add">ADD</span><span>Multi-tab system with close/add buttons and script persistence</span></div>
-          <div class="cc"><span class="ct add">ADD</span><span>Animated toast notification system</span></div>
-          <div class="cc"><span class="ct add">ADD</span><span>weao.gg version check — compares local Roblox build against live API</span></div>
-        </div></div></div>
-      </div>
-      <div class="ce">
-        <div class="ceh"><div class="cel"><div class="cev">v6.0</div><span class="chip2 ol">Old</span><span class="ced">Oct 2024</span></div><span class="chev">▼</span></div>
-        <div class="cb"><div class="cbi"><div class="cch">
-          <div class="cc"><span class="ct add">ADD</span><span>Auto Executor — folder watcher runs scripts automatically on inject</span></div>
-          <div class="cc"><span class="ct add">ADD</span><span>Settings page with animated toggle switches</span></div>
-          <div class="cc"><span class="ct fix">FIX</span><span>Window drag behavior while maximized</span></div>
-        </div></div></div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- DOWNLOAD -->
-<section id="download">
-  <div class="dg"></div><div class="dtl"></div><div class="dbr"></div>
-  <div class="ey rv" style="justify-content:center">Download</div>
-  <h2 class="dbig rv">GET <span>NOVA</span><br>FOR FREE</h2>
-  <p class="dsub rv">No key system. No ads. No nonsense.<br>Just download and run.</p>
-  <div class="dacts rv">
-    <a href="https://github.com/novaaexecutor/novaexecutor/raw/refs/heads/main/NovaExecutor.zip" class="bdl"><span>↓</span><span>Download Now</span></a>
-    <a href="https://www.youtube.com/@Lmaosbros" target="_blank" rel="noopener" class="bol">▶ YouTube</a>
-  </div>
-  <div class="dnote rv">REQUIRES: <span>WINDOWS 10/11</span> · <span>.NET 8</span> · <span>ROBLOX INSTALLED</span><br>Whitelist in antivirus before running.</div>
-</section>
-
-<!-- FOOTER -->
 <footer>
-  <div class="fl">
-    <div class="fn2">N</div>
-    <div><div class="fname2">NOVA EXECUTOR</div><div class="fcopy">© 2025 · v8.0 · Free Forever</div></div>
-  </div>
+  <div class="fl"><div class="fn2">N</div><div><div class="fname2">NOVA EXECUTOR</div><div class="fcopy">© 2025 · v8.0 · Free Forever</div></div></div>
   <ul class="flinks">
-    <li><a href="#changelog">Changelog</a></li>
+    <li><a href="features.html">Features</a></li>
+    <li><a href="changelog.html">Changelog</a></li>
+    <li><a href="download.html">Download</a></li>
     <li><a href="https://www.youtube.com/@Lmaosbros" target="_blank">YouTube</a></li>
-    <li><a href="#download">Download</a></li>
   </ul>
 </footer>
-
-<script>
-// CURSOR
-const cd=document.getElementById('cd'),cr=document.getElementById('cr');
-let mx=0,my=0,rx=0,ry=0;
-document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;cd.style.left=mx+'px';cd.style.top=my+'px'});
-(function a(){rx+=(mx-rx)*.1;ry+=(my-ry)*.1;cr.style.left=rx+'px';cr.style.top=ry+'px';requestAnimationFrame(a)})();
-document.querySelectorAll('a,button,.fc,.hs,.ceh').forEach(el=>{
-  el.addEventListener('mouseenter',()=>document.body.classList.add('ch'));
-  el.addEventListener('mouseleave',()=>document.body.classList.remove('ch'));
-});
-
-// CANVAS
-const cv=document.getElementById('cv'),ctx=cv.getContext('2d');
-function rsz(){cv.width=innerWidth;cv.height=innerHeight}rsz();
-window.addEventListener('resize',rsz);
-let mouseX=-999,mouseY=-999;
-document.addEventListener('mousemove',e=>{mouseX=e.clientX;mouseY=e.clientY});
-const ps=Array.from({length:75},()=>({x:Math.random()*innerWidth,y:Math.random()*innerHeight,vy:.2+Math.random()*.5,vx:(Math.random()-.5)*.15,r:.5+Math.random()*1.8,l:Math.random(),m:0}));
-ps.forEach(p=>p.m=p.l);
-function drw(){
-  ctx.clearRect(0,0,cv.width,cv.height);
-  const cw=80,ch=80,cols=Math.ceil(cv.width/cw)+1,rows=Math.ceil(cv.height/ch)+1;
-  for(let r=0;r<rows;r++){for(let c=0;c<cols;c++){
-    const cx2=c*cw,cy2=r*ch;
-    const d=Math.hypot(cx2+cw/2-mouseX,cy2+ch/2-mouseY);
-    const p=Math.max(0,1-d/300);
-    ctx.strokeStyle=`rgba(110,80,255,${.05+p*.28})`;
-    ctx.lineWidth=1;ctx.strokeRect(cx2+.5,cy2+.5,cw,ch);
-    if(p>.04){ctx.fillStyle=`rgba(110,80,255,${p*.09})`;ctx.fillRect(cx2+1,cy2+1,cw-2,ch-2)}
-  }}
-  const g=ctx.createRadialGradient(cv.width/2,cv.height/3,0,cv.width/2,cv.height/3,cv.width*.5);
-  g.addColorStop(0,'rgba(110,80,255,0.07)');g.addColorStop(1,'transparent');
-  ctx.fillStyle=g;ctx.fillRect(0,0,cv.width,cv.height);
-  for(const p of ps){
-    p.y-=p.vy;p.x+=p.vx;p.l-=.002;
-    if(p.l<=0||p.y<-4){p.x=Math.random()*cv.width;p.y=cv.height+4;p.l=Math.random();p.m=p.l}
-    const a=Math.pow(p.l/p.m,1.4)*.5;
-    ctx.globalAlpha=a;ctx.fillStyle='#a05aff';
-    ctx.beginPath();ctx.arc(p.x,p.y,p.r*a,0,Math.PI*2);ctx.fill();
-  }
-  ctx.globalAlpha=1;requestAnimationFrame(drw);
-}
-drw();
-
-// REVEAL
-const obs=new IntersectionObserver(entries=>{
-  entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('on');obs.unobserve(e.target)}});
-},{threshold:.1});
-document.querySelectorAll('.rv,.rvl,.rvr').forEach((el,i)=>{el.style.transitionDelay=(i%4)*.08+'s';obs.observe(el)});
-
-// FEAT CARD MOUSE
-document.querySelectorAll('.fc').forEach(card=>{
-  card.addEventListener('mousemove',e=>{
-    const r=card.getBoundingClientRect();
-    card.style.setProperty('--mx',((e.clientX-r.left)/r.width*100)+'%');
-    card.style.setProperty('--my',((e.clientY-r.top)/r.height*100)+'%');
-  });
-});
-
-// NAV SCROLL
-const nav=document.getElementById('nav');
-const secs=['hero','features','changelog','download'];
-window.addEventListener('scroll',()=>{
-  nav.classList.toggle('sc',scrollY>50);
-  let cur='hero';
-  secs.forEach(id=>{const el=document.getElementById(id);if(el&&el.getBoundingClientRect().top<=80)cur=id});
-  document.querySelectorAll('.nlinks a').forEach(a=>a.classList.toggle('act',a.getAttribute('href')==='#'+cur));
-});
-
-// CHANGELOG
-document.querySelectorAll('.ceh').forEach(h=>{
-  h.addEventListener('click',()=>{
-    const e=h.closest('.ce'),isOpen=e.classList.contains('open');
-    document.querySelectorAll('.ce.open').forEach(x=>x.classList.remove('open'));
-    if(!isOpen)e.classList.add('open');
-  });
-});
-</script>
+<script src="app.js"></script>
 </body>
 </html>
