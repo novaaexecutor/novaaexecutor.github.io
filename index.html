@@ -1,728 +1,426 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Nova Executor</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
-<style>
-  :root {
-    --bg:       #000000;
-    --bg1:      #060608;
-    --bg2:      #0d0d12;
-    --bg3:      #141420;
-    --border:   rgba(110,80,255,0.15);
-    --accent:   #6e50ff;
-    --accentH:  #a05aff;
-    --accentY:  #d4ff00;
-    --text:     #e8e8f0;
-    --muted:    #5a5a7a;
-    --dim:      #2a2a3a;
-    --green:    #00e87a;
-    --red:      #ff3b5c;
-    --gold:     #ffb800;
-  }
-
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-  html { scroll-behavior: smooth; }
-
-  body {
-    background: var(--bg);
-    color: var(--text);
-    font-family: 'DM Sans', sans-serif;
-    overflow-x: hidden;
-    cursor: none;
-  }
-
-  /* ── CUSTOM CURSOR ── */
-  #cursor {
-    position: fixed; width: 10px; height: 10px;
-    background: var(--accent); border-radius: 50%;
-    pointer-events: none; z-index: 9999;
-    transform: translate(-50%,-50%);
-    transition: transform 0.1s, background 0.2s, width 0.2s, height 0.2s;
-    mix-blend-mode: screen;
-  }
-  #cursor-ring {
-    position: fixed; width: 36px; height: 36px;
-    border: 1px solid rgba(110,80,255,0.5); border-radius: 50%;
-    pointer-events: none; z-index: 9998;
-    transform: translate(-50%,-50%);
-    transition: transform 0.18s ease, opacity 0.2s;
-  }
-  body:hover #cursor { opacity:1; }
-
-  /* ── NOISE OVERLAY ── */
-  body::before {
-    content:''; position:fixed; inset:0;
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
-    opacity: 0.028; pointer-events: none; z-index: 1; animation: noiseAnim 0.3s steps(1) infinite;
-  }
-  @keyframes noiseAnim { 0%{transform:translate(0,0)} 25%{transform:translate(-2px,1px)} 50%{transform:translate(2px,-1px)} 75%{transform:translate(-1px,2px)} 100%{transform:translate(1px,-2px)} }
-
-  /* ── GRID BG ── */
-  .grid-bg {
-    position: fixed; inset: 0; pointer-events: none; z-index: 0;
-    background-image:
-      linear-gradient(rgba(110,80,255,0.04) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(110,80,255,0.04) 1px, transparent 1px);
-    background-size: 48px 48px;
-  }
-
-  /* ── NAV ── */
-  nav {
-    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
-    display: flex; align-items: center; justify-content: space-between;
-    padding: 20px 48px;
-    background: linear-gradient(to bottom, rgba(0,0,0,0.9), transparent);
-    backdrop-filter: blur(0px);
-  }
-  .nav-logo {
-    display: flex; align-items: center; gap: 12px;
-    font-family: 'Bebas Neue', sans-serif; font-size: 22px;
-    letter-spacing: 3px; color: var(--text); text-decoration: none;
-  }
-  .nav-logo .n-badge {
-    width: 34px; height: 34px; border-radius: 8px;
-    background: linear-gradient(135deg, var(--accent), var(--accentH));
-    display: flex; align-items: center; justify-content: center;
-    font-size: 18px; font-weight: 900; color: #fff;
-    box-shadow: 0 0 20px rgba(110,80,255,0.5);
-  }
-  .nav-links { display: flex; align-items: center; gap: 32px; }
-  .nav-links a {
-    font-family: 'Space Mono', monospace; font-size: 11px;
-    color: var(--muted); text-decoration: none; letter-spacing: 1px;
-    text-transform: uppercase; transition: color 0.2s;
-    position: relative;
-  }
-  .nav-links a::after {
-    content: ''; position: absolute; bottom: -4px; left: 0; right: 0; height: 1px;
-    background: var(--accent); transform: scaleX(0); transition: transform 0.2s;
-  }
-  .nav-links a:hover { color: var(--text); }
-  .nav-links a:hover::after { transform: scaleX(1); }
-  .nav-links a.active { color: var(--text); }
-  .nav-links a.active::after { transform: scaleX(1); }
-
-  /* ── SECTIONS ── */
-  section { position: relative; z-index: 2; }
-
-  /* ── HERO ── */
-  #home {
-    min-height: 100vh; display: flex; flex-direction: column;
-    align-items: center; justify-content: center; text-align: center;
-    padding: 120px 24px 80px;
-    position: relative; overflow: hidden;
-  }
-  .hero-glow {
-    position: absolute; top: 50%; left: 50%; transform: translate(-50%,-60%);
-    width: 700px; height: 700px; border-radius: 50%;
-    background: radial-gradient(ellipse, rgba(110,80,255,0.12) 0%, transparent 70%);
-    pointer-events: none; animation: glowPulse 4s ease-in-out infinite;
-  }
-  @keyframes glowPulse { 0%,100%{opacity:0.8; transform:translate(-50%,-60%) scale(1)} 50%{opacity:1.2; transform:translate(-50%,-60%) scale(1.08)} }
-
-  .hero-badge {
-    display: inline-flex; align-items: center; gap: 8px;
-    border: 1px solid rgba(212,255,0,0.3); border-radius: 100px;
-    padding: 6px 16px; margin-bottom: 40px;
-    font-family: 'Space Mono', monospace; font-size: 10px;
-    color: var(--accentY); letter-spacing: 2px; text-transform: uppercase;
-    background: rgba(212,255,0,0.05);
-    animation: fadeDown 0.6s ease both;
-  }
-  .hero-badge .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accentY); animation: blink 1.4s ease infinite; }
-  @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.2} }
-
-  h1.hero-title {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: clamp(80px, 14vw, 180px);
-    line-height: 0.88;
-    letter-spacing: 4px;
-    animation: fadeUp 0.7s 0.1s ease both;
-  }
-  h1.hero-title .line1 { display: block; color: var(--text); }
-  h1.hero-title .line2 {
-    display: block;
-    background: linear-gradient(90deg, var(--accent) 0%, var(--accentH) 50%, var(--accentY) 100%);
-    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-    filter: drop-shadow(0 0 40px rgba(110,80,255,0.5));
-  }
-
-  .hero-sub {
-    margin: 32px 0 48px;
-    font-size: 15px; color: var(--muted); line-height: 1.7;
-    max-width: 440px;
-    font-weight: 300;
-    animation: fadeUp 0.7s 0.2s ease both;
-  }
-
-  .hero-btns {
-    display: flex; align-items: center; gap: 16px;
-    animation: fadeUp 0.7s 0.3s ease both;
-  }
-
-  .btn-primary {
-    display: inline-flex; align-items: center; gap: 10px;
-    padding: 14px 32px; border-radius: 12px;
-    background: linear-gradient(135deg, var(--accent), var(--accentH));
-    color: #fff; font-family: 'Space Mono', monospace;
-    font-size: 12px; font-weight: 700; letter-spacing: 1px;
-    text-decoration: none; text-transform: uppercase;
-    border: none; cursor: none;
-    box-shadow: 0 0 40px rgba(110,80,255,0.35), inset 0 1px 0 rgba(255,255,255,0.15);
-    transition: transform 0.2s, box-shadow 0.2s;
-    position: relative; overflow: hidden;
-  }
-  .btn-primary::before {
-    content: ''; position: absolute; inset: 0;
-    background: linear-gradient(135deg, var(--accentH), var(--accent));
-    opacity: 0; transition: opacity 0.2s;
-  }
-  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 0 60px rgba(110,80,255,0.55), inset 0 1px 0 rgba(255,255,255,0.15); }
-  .btn-primary:hover::before { opacity: 1; }
-  .btn-primary span { position: relative; z-index: 1; }
-
-  .btn-ghost {
-    display: inline-flex; align-items: center; gap: 8px;
-    padding: 14px 28px; border-radius: 12px;
-    border: 1px solid var(--border); color: var(--muted);
-    font-family: 'Space Mono', monospace; font-size: 12px;
-    letter-spacing: 1px; text-decoration: none; text-transform: uppercase;
-    cursor: none; transition: all 0.2s;
-    background: rgba(255,255,255,0.02);
-  }
-  .btn-ghost:hover { border-color: rgba(110,80,255,0.4); color: var(--text); background: rgba(110,80,255,0.06); }
-
-  /* ── STATS ── */
-  .stats {
-    display: flex; gap: 0; margin: 80px 0 0;
-    border: 1px solid var(--border); border-radius: 16px;
-    overflow: hidden; background: rgba(255,255,255,0.02);
-    backdrop-filter: blur(8px);
-    animation: fadeUp 0.7s 0.4s ease both;
-  }
-  .stat {
-    flex: 1; padding: 28px 40px; text-align: center;
-    border-right: 1px solid var(--border);
-    transition: background 0.2s;
-  }
-  .stat:last-child { border-right: none; }
-  .stat:hover { background: rgba(110,80,255,0.05); }
-  .stat-val {
-    font-family: 'Bebas Neue', sans-serif; font-size: 38px;
-    letter-spacing: 2px;
-    background: linear-gradient(135deg, var(--text), var(--accentY));
-    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-  }
-  .stat-lbl { font-family: 'Space Mono', monospace; font-size: 9px; color: var(--muted); letter-spacing: 2px; text-transform: uppercase; margin-top: 4px; }
-
-  /* ── FEATURES ── */
-  #features { padding: 120px 48px; max-width: 1200px; margin: 0 auto; }
-  .section-tag {
-    font-family: 'Space Mono', monospace; font-size: 10px;
-    color: var(--accent); letter-spacing: 3px; text-transform: uppercase;
-    margin-bottom: 16px; display: flex; align-items: center; gap: 10px;
-  }
-  .section-tag::before { content: '//'; opacity: 0.5; }
-  .section-title {
-    font-family: 'Bebas Neue', sans-serif; font-size: clamp(42px, 5vw, 72px);
-    letter-spacing: 2px; line-height: 1; margin-bottom: 64px;
-  }
-  .section-title span { color: var(--accent); }
-
-  .feat-grid {
-    display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px;
-  }
-  .feat-card {
-    background: var(--bg2); padding: 36px 32px;
-    border: 1px solid var(--border); border-radius: 0;
-    transition: all 0.3s; position: relative; overflow: hidden;
-  }
-  .feat-card:first-child { border-radius: 16px 0 0 0; }
-  .feat-card:nth-child(3) { border-radius: 0 16px 0 0; }
-  .feat-card:nth-child(4) { border-radius: 0 0 0 16px; }
-  .feat-card:last-child { border-radius: 0 0 16px 0; }
-  .feat-card::before {
-    content: ''; position: absolute; inset: 0;
-    background: linear-gradient(135deg, rgba(110,80,255,0.06), transparent);
-    opacity: 0; transition: opacity 0.3s;
-  }
-  .feat-card:hover { border-color: rgba(110,80,255,0.35); transform: translateY(-2px); }
-  .feat-card:hover::before { opacity: 1; }
-  .feat-icon {
-    width: 44px; height: 44px; border-radius: 10px;
-    background: rgba(110,80,255,0.1); border: 1px solid rgba(110,80,255,0.2);
-    display: flex; align-items: center; justify-content: center;
-    font-size: 20px; margin-bottom: 20px;
-    transition: all 0.3s;
-  }
-  .feat-card:hover .feat-icon { background: rgba(110,80,255,0.2); box-shadow: 0 0 20px rgba(110,80,255,0.3); }
-  .feat-name { font-size: 16px; font-weight: 600; margin-bottom: 8px; color: var(--text); }
-  .feat-desc { font-size: 13px; color: var(--muted); line-height: 1.65; font-weight: 300; }
-
-  /* ── VERSION / WEAO ── */
-  #versions { padding: 80px 48px; max-width: 1200px; margin: 0 auto; }
-  .ver-box {
-    background: var(--bg2); border: 1px solid var(--border);
-    border-radius: 20px; padding: 40px 48px;
-    display: flex; align-items: center; justify-content: space-between;
-    gap: 32px; flex-wrap: wrap;
-    position: relative; overflow: hidden;
-  }
-  .ver-box::before {
-    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
-    background: linear-gradient(90deg, transparent, var(--accent), var(--accentH), transparent);
-  }
-  .ver-info { display: flex; flex-direction: column; gap: 6px; }
-  .ver-label { font-family: 'Space Mono', monospace; font-size: 10px; color: var(--muted); letter-spacing: 2px; text-transform: uppercase; }
-  .ver-number {
-    font-family: 'Bebas Neue', sans-serif; font-size: 52px; line-height: 1;
-    background: linear-gradient(90deg, var(--accent), var(--accentH));
-    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-  }
-  .ver-date { font-size: 13px; color: var(--muted); }
-  .ver-status {
-    display: flex; align-items: center; gap: 10px;
-    padding: 10px 20px; border-radius: 100px;
-    font-family: 'Space Mono', monospace; font-size: 11px;
-    font-weight: 700; letter-spacing: 1px;
-  }
-  .ver-status.ok { background: rgba(0,232,122,0.1); color: var(--green); border: 1px solid rgba(0,232,122,0.3); }
-  .ver-status.warn { background: rgba(255,184,0,0.1); color: var(--gold); border: 1px solid rgba(255,184,0,0.3); }
-  .ver-status.err { background: rgba(255,59,92,0.1); color: var(--red); border: 1px solid rgba(255,59,92,0.3); }
-  .ver-dot { width: 8px; height: 8px; border-radius: 50%; animation: blink 1.4s ease infinite; }
-  .ver-dot.ok { background: var(--green); }
-  .ver-dot.warn { background: var(--gold); }
-  .ver-dot.err { background: var(--red); }
-  .ver-refresh {
-    padding: 10px 20px; border-radius: 10px;
-    background: rgba(110,80,255,0.1); border: 1px solid rgba(110,80,255,0.25);
-    color: var(--accent); font-family: 'Space Mono', monospace; font-size: 11px;
-    cursor: none; transition: all 0.2s; letter-spacing: 1px;
-  }
-  .ver-refresh:hover { background: rgba(110,80,255,0.2); box-shadow: 0 0 20px rgba(110,80,255,0.2); }
-  #spin { display: inline-block; }
-  @keyframes spin { to { transform: rotate(360deg); } }
-  .spinning #spin { animation: spin 0.6s linear infinite; }
-
-  /* ── CHANGELOG ── */
-  #changelog { padding: 80px 48px; max-width: 1200px; margin: 0 auto; }
-  .cl-list { display: flex; flex-direction: column; gap: 2px; }
-  .cl-entry {
-    background: var(--bg2); border: 1px solid var(--border); border-radius: 0;
-    overflow: hidden; transition: border-color 0.2s;
-  }
-  .cl-entry:first-child { border-radius: 16px 16px 0 0; }
-  .cl-entry:last-child { border-radius: 0 0 16px 16px; }
-  .cl-header {
-    display: flex; align-items: center; justify-content: space-between;
-    padding: 22px 28px; cursor: none; transition: background 0.2s;
-    user-select: none;
-  }
-  .cl-header:hover { background: rgba(110,80,255,0.04); }
-  .cl-left { display: flex; align-items: center; gap: 16px; }
-  .cl-ver {
-    font-family: 'Bebas Neue', sans-serif; font-size: 22px;
-    color: var(--accent); letter-spacing: 2px; min-width: 60px;
-  }
-  .cl-tag {
-    padding: 3px 10px; border-radius: 100px; font-family: 'Space Mono', monospace;
-    font-size: 9px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase;
-  }
-  .cl-tag.latest { background: rgba(212,255,0,0.1); color: var(--accentY); border: 1px solid rgba(212,255,0,0.3); }
-  .cl-tag.stable { background: rgba(0,232,122,0.1); color: var(--green); border: 1px solid rgba(0,232,122,0.2); }
-  .cl-tag.old { background: rgba(90,90,122,0.15); color: var(--muted); border: 1px solid var(--dim); }
-  .cl-date { font-size: 12px; color: var(--muted); font-family: 'Space Mono', monospace; }
-  .cl-chevron { color: var(--muted); font-size: 14px; transition: transform 0.3s; }
-  .cl-entry.open .cl-chevron { transform: rotate(180deg); }
-  .cl-body { max-height: 0; overflow: hidden; transition: max-height 0.4s ease; }
-  .cl-entry.open .cl-body { max-height: 600px; }
-  .cl-inner { padding: 0 28px 24px; border-top: 1px solid var(--dim); }
-  .cl-changes { display: flex; flex-direction: column; gap: 8px; margin-top: 16px; }
-  .cl-change {
-    display: flex; align-items: flex-start; gap: 12px;
-    font-size: 13px; color: var(--muted); line-height: 1.5;
-  }
-  .cl-change .tag {
-    padding: 1px 8px; border-radius: 4px; font-size: 9px; font-weight: 700;
-    font-family: 'Space Mono', monospace; letter-spacing: 0.5px; flex-shrink: 0; margin-top: 2px;
-  }
-  .tag.add { background: rgba(0,232,122,0.12); color: var(--green); }
-  .tag.fix { background: rgba(255,184,0,0.12); color: var(--gold); }
-  .tag.imp { background: rgba(110,80,255,0.12); color: var(--accent); }
-  .tag.rem { background: rgba(255,59,92,0.12); color: var(--red); }
-
-  /* ── DOWNLOAD CTA ── */
-  #download { padding: 120px 48px; text-align: center; position: relative; overflow: hidden; }
-  .dl-glow {
-    position: absolute; bottom: -100px; left: 50%; transform: translateX(-50%);
-    width: 600px; height: 600px; border-radius: 50%;
-    background: radial-gradient(ellipse, rgba(110,80,255,0.1) 0%, transparent 70%);
-    pointer-events: none;
-  }
-  .dl-title {
-    font-family: 'Bebas Neue', sans-serif; font-size: clamp(48px, 7vw, 96px);
-    letter-spacing: 3px; line-height: 1; margin-bottom: 24px;
-  }
-  .dl-title span { color: var(--accent); }
-  .dl-sub { font-size: 15px; color: var(--muted); margin-bottom: 48px; font-weight: 300; }
-  .dl-actions { display: flex; align-items: center; justify-content: center; gap: 16px; flex-wrap: wrap; }
-
-  /* ── FOOTER ── */
-  footer {
-    border-top: 1px solid var(--dim); padding: 32px 48px;
-    display: flex; align-items: center; justify-content: space-between;
-    flex-wrap: wrap; gap: 16px;
-    font-family: 'Space Mono', monospace; font-size: 10px; color: var(--muted);
-    position: relative; z-index: 2;
-  }
-  footer a { color: var(--muted); text-decoration: none; transition: color 0.2s; }
-  footer a:hover { color: var(--accent); }
-
-  /* ── TICKER ── */
-  .ticker-wrap {
-    border-top: 1px solid var(--dim); border-bottom: 1px solid var(--dim);
-    overflow: hidden; padding: 12px 0; background: var(--bg1);
-    position: relative; z-index: 2;
-  }
-  .ticker {
-    display: flex; gap: 0; animation: ticker 22s linear infinite;
-    width: max-content;
-  }
-  .ticker-item {
-    padding: 0 40px; font-family: 'Space Mono', monospace;
-    font-size: 10px; color: var(--muted); letter-spacing: 2px; text-transform: uppercase;
-    display: flex; align-items: center; gap: 12px; white-space: nowrap;
-  }
-  .ticker-item .sep { color: var(--accent); }
-  @keyframes ticker { from{transform:translateX(0)} to{transform:translateX(-50%)} }
-
-  /* ── ANIMATIONS ── */
-  @keyframes fadeUp { from{opacity:0;transform:translateY(28px)} to{opacity:1;transform:translateY(0)} }
-  @keyframes fadeDown { from{opacity:0;transform:translateY(-16px)} to{opacity:1;transform:translateY(0)} }
-
-  .reveal {
-    opacity: 0; transform: translateY(24px);
-    transition: opacity 0.6s ease, transform 0.6s ease;
-  }
-  .reveal.visible { opacity: 1; transform: translateY(0); }
-
-  /* ── SCROLLBAR ── */
-  ::-webkit-scrollbar { width: 4px; }
-  ::-webkit-scrollbar-track { background: var(--bg); }
-  ::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 2px; }
-
-  /* ── SELECTION ── */
-  ::selection { background: rgba(110,80,255,0.3); }
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Nova Executor — The fastest, cleanest Roblox executor. Free forever.">
+  <meta property="og:title" content="Nova Executor">
+  <meta property="og:description" content="Fast attach. Clean GUI. Built for speed, designed for control.">
+  <meta property="og:image" content="https://opengraph.githubassets.com/1/yavuz16821/novaexecutora">
+  <title>Nova Executor</title>
+  <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-<div class="grid-bg"></div>
-<div id="cursor"></div>
-<div id="cursor-ring"></div>
 
-<!-- NAV -->
+<!-- CANVAS BACKGROUND -->
+<canvas id="bg-canvas"></canvas>
+
+<!-- CURSOR -->
+<div id="cur-dot"></div>
+<div id="cur-ring"></div>
+
+<!-- ═══════════════════════════════════════
+     NAV
+═══════════════════════════════════════ -->
 <nav>
-  <a href="#home" class="nav-logo">
-    <div class="n-badge">N</div>
-    NOVA
+  <a href="#hero" class="nav-logo">
+    <div class="nav-n">N</div>
+    <span class="nav-wordmark">Nova</span>
   </a>
-  <div class="nav-links">
-    <a href="#home" class="active" onclick="setActive(this)">Home</a>
-    <a href="#features" onclick="setActive(this)">Features</a>
-    <a href="#versions" onclick="setActive(this)">Version</a>
-    <a href="#changelog" onclick="setActive(this)">Changelog</a>
-    <a href="#download" onclick="setActive(this)">Download</a>
-  </div>
+
+  <ul class="nav-links">
+    <li><a href="#hero" class="active">Home</a></li>
+    <li><a href="#features">Features</a></li>
+    <li><a href="#version">Version</a></li>
+    <li><a href="#changelog">Changelog</a></li>
+    <li><a href="#download">Download</a></li>
+  </ul>
+
+  <a href="https://www.youtube.com/@Lmaosbros" target="_blank" rel="noopener" class="nav-yt">
+    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.5 12 3.5 12 3.5s-7.5 0-9.4.6A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.6 9.4.6 9.4.6s7.5 0 9.4-.6a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8zM9.75 15.5V8.5l6.25 3.5-6.25 3.5z" fill="currentColor"/></svg>
+    YouTube
+  </a>
 </nav>
 
-<!-- HERO -->
-<section id="home">
-  <div class="hero-glow"></div>
-  <div class="hero-badge"><span class="dot"></span> <span id="hero-ver-badge">Loading version...</span></div>
-  <h1 class="hero-title">
-    <span class="line1">NOVA</span>
-    <span class="line2">EXECUTOR</span>
-  </h1>
-  <p class="hero-sub">Fast attach. Clean GUI.<br>Built for speed, designed for control.</p>
-  <div class="hero-btns">
-    <a href="#download" class="btn-primary"><span>↓</span><span>Download Now</span></a>
-    <a href="#changelog" class="btn-ghost">View Changelog ↗</a>
+<!-- ═══════════════════════════════════════
+     HERO
+═══════════════════════════════════════ -->
+<section id="hero">
+  <div class="hero-badge">
+    <span class="blink"></span>
+    <span id="hero-badge-text">v8.0 — NOW AVAILABLE</span>
   </div>
-  <div class="stats reveal">
-    <div class="stat"><div class="stat-val">&lt;0.3s</div><div class="stat-lbl">Attach Time</div></div>
-    <div class="stat"><div class="stat-val">UNC</div><div class="stat-lbl">API Support</div></div>
-    <div class="stat"><div class="stat-val">v8</div><div class="stat-lbl">Current Build</div></div>
-    <div class="stat"><div class="stat-val">FREE</div><div class="stat-lbl">Always</div></div>
+
+  <h1 class="hero-title">
+    <span class="t1">NOVA</span>
+    <span class="t2">EXECUTOR</span>
+  </h1>
+
+  <p class="hero-sub">
+    Fast attach. Clean GUI.<br>
+    Built for speed, designed for control.<br>
+    Free forever — no key system.
+  </p>
+
+  <div class="hero-actions">
+    <a href="https://github.com/yavuz16821/novaexecutora/raw/refs/heads/main/Bootstrapper.exe"
+       class="btn-dl">
+      <span class="btn-icon">↓</span>
+      <span>Download Free</span>
+    </a>
+    <a href="#changelog" class="btn-outline">View Changelog ↗</a>
+    <a href="https://github.com/yavuz16821/novaexecutora" target="_blank" rel="noopener" class="btn-outline">★ GitHub</a>
+  </div>
+
+  <div class="hero-stats reveal">
+    <div class="hstat">
+      <div class="hstat-val">&lt;0.3s</div>
+      <div class="hstat-lbl">Attach Time</div>
+    </div>
+    <div class="hstat">
+      <div class="hstat-val">UNC</div>
+      <div class="hstat-lbl">API Support</div>
+    </div>
+    <div class="hstat">
+      <div class="hstat-val">v8</div>
+      <div class="hstat-lbl">Current Build</div>
+    </div>
+    <div class="hstat">
+      <div class="hstat-val">FREE</div>
+      <div class="hstat-lbl">Always</div>
+    </div>
+    <div class="hstat">
+      <div class="hstat-val">500k+</div>
+      <div class="hstat-lbl">Hub Scripts</div>
+    </div>
   </div>
 </section>
 
 <!-- TICKER -->
 <div class="ticker-wrap">
-  <div class="ticker">
-    <div class="ticker-item"><span class="sep">✦</span> Nova Executor <span class="sep">✦</span> Fast Attach <span class="sep">✦</span> Script Hub <span class="sep">✦</span> Auto Execute <span class="sep">✦</span> Monaco Editor <span class="sep">✦</span> UNC Support <span class="sep">✦</span> Free Forever <span class="sep">✦</span> Script Tabs <span class="sep">✦</span> weao.gg Integration</div>
-    <div class="ticker-item"><span class="sep">✦</span> Nova Executor <span class="sep">✦</span> Fast Attach <span class="sep">✦</span> Script Hub <span class="sep">✦</span> Auto Execute <span class="sep">✦</span> Monaco Editor <span class="sep">✦</span> UNC Support <span class="sep">✦</span> Free Forever <span class="sep">✦</span> Script Tabs <span class="sep">✦</span> weao.gg Integration</div>
+  <div class="ticker-track">
+    <div class="ticker-item"><span class="s">✦</span> Nova Executor <span class="s">✦</span> Fast Attach <span class="s">✦</span> Script Hub <span class="s">✦</span> Auto Execute <span class="s">✦</span> Multi-Tab Editor <span class="s">✦</span> UNC Support <span class="s">✦</span> Free Forever <span class="s">✦</span> ScriptBlox Integration <span class="s">✦</span> weao.gg Verified <span class="s">✦</span> No Key System <span class="s">✦</span> VelocityAPI <span class="s">✦</span> Toast Notifications <span class="s">✦</span> Auto Exec Folder</div>
+    <div class="ticker-item"><span class="s">✦</span> Nova Executor <span class="s">✦</span> Fast Attach <span class="s">✦</span> Script Hub <span class="s">✦</span> Auto Execute <span class="s">✦</span> Multi-Tab Editor <span class="s">✦</span> UNC Support <span class="s">✦</span> Free Forever <span class="s">✦</span> ScriptBlox Integration <span class="s">✦</span> weao.gg Verified <span class="s">✦</span> No Key System <span class="s">✦</span> VelocityAPI <span class="s">✦</span> Toast Notifications <span class="s">✦</span> Auto Exec Folder</div>
   </div>
 </div>
 
-<!-- FEATURES -->
+<!-- ═══════════════════════════════════════
+     FEATURES
+═══════════════════════════════════════ -->
 <section id="features">
-  <div class="section-tag">Features</div>
-  <h2 class="section-title reveal">WHAT MAKES<br><span>NOVA DIFFERENT</span></h2>
-  <div class="feat-grid reveal">
-    <div class="feat-card"><div class="feat-icon">⚡</div><div class="feat-name">Instant Attach</div><div class="feat-desc">Sub-300ms inject times with zero lag on startup. Powered by VelocityAPI.</div></div>
-    <div class="feat-card"><div class="feat-icon">📝</div><div class="feat-name">Script Editor</div><div class="feat-desc">Multi-tab editor with syntax support, file save/open, and auto-complete ready.</div></div>
-    <div class="feat-card"><div class="feat-icon">📦</div><div class="feat-name">Script Hub</div><div class="feat-desc">Live ScriptBlox integration — search and execute 500k+ scripts instantly.</div></div>
-    <div class="feat-card"><div class="feat-icon">🔁</div><div class="feat-name">Auto Execute</div><div class="feat-desc">Drop .lua or .txt files in the autoexec folder and they run on every inject.</div></div>
-    <div class="feat-card"><div class="feat-icon">🌐</div><div class="feat-name">Version Checker</div><div class="feat-desc">Live weao.gg API integration — always know if Roblox is up to date.</div></div>
-    <div class="feat-card"><div class="feat-icon">🎨</div><div class="feat-name">Modern UI</div><div class="feat-desc">Full black theme, animated sidebar, toast notifications, and smooth transitions.</div></div>
-  </div>
-</section>
+  <div class="features-inner">
+    <div class="features-header">
+      <div>
+        <div class="section-eyebrow reveal-l">Features</div>
+        <h2 class="features-title reveal-l">
+          BUILT<br>DIFFERENT<span>.</span>
+        </h2>
+      </div>
+      <p class="features-sub reveal-r">
+        Every feature handcrafted for Roblox power users who demand speed and reliability.
+      </p>
+    </div>
 
-<!-- VERSION CHECK -->
-<section id="versions">
-  <div style="max-width:1200px; margin:0 auto; padding:0 48px;">
-    <div class="section-tag">Version Check</div>
-    <h2 class="section-title reveal">ROBLOX<br><span>STATUS</span></h2>
-    <div class="ver-box reveal">
-      <div class="ver-info">
-        <div class="ver-label">Latest Roblox Version (weao.gg)</div>
-        <div class="ver-number" id="weao-ver">—</div>
-        <div class="ver-date" id="weao-date">Checking...</div>
+    <div class="feat-grid">
+
+      <!-- Card 1 — wide -->
+      <div class="feat-card wide reveal">
+        <div class="feat-num">01</div>
+        <div class="feat-icon-wrap">⚡</div>
+        <div class="feat-name">Instant Attach</div>
+        <div class="feat-desc">
+          Sub-300ms inject times with zero lag on startup. Powered by VelocityAPI — the most reliable injection layer available. One click, instantly attached, no waiting around.
+        </div>
+        <span class="feat-tag">VelocityAPI Powered</span>
       </div>
-      <div id="ver-status" class="ver-status warn">
-        <div class="ver-dot warn"></div>
-        <span>Checking...</span>
+
+      <!-- Card 2 -->
+      <div class="feat-card reveal">
+        <div class="feat-num">02</div>
+        <div class="feat-icon-wrap">📝</div>
+        <div class="feat-name">Multi-Tab Editor</div>
+        <div class="feat-desc">
+          Open multiple scripts at once in a tabbed editor. Save, load, rename — full file management built in.
+        </div>
+        <span class="feat-tag">Cascadia Code Font</span>
       </div>
-      <button class="ver-refresh" onclick="fetchWeao()" id="refreshBtn">
-        <span id="spin">↻</span> Refresh
-      </button>
+
+      <!-- Card 3 -->
+      <div class="feat-card reveal">
+        <div class="feat-num">03</div>
+        <div class="feat-icon-wrap">📦</div>
+        <div class="feat-name">Script Hub</div>
+        <div class="feat-desc">
+          Live ScriptBlox.com integration. Browse 500k+ free scripts, search by game, load in one click.
+        </div>
+        <span class="feat-tag">ScriptBlox API</span>
+      </div>
+
+      <!-- Card 4 -->
+      <div class="feat-card reveal">
+        <div class="feat-num">04</div>
+        <div class="feat-icon-wrap">🔁</div>
+        <div class="feat-name">Auto Execute</div>
+        <div class="feat-desc">
+          Drop .lua or .txt files in the autoexec folder — they run automatically on every inject. Set and forget.
+        </div>
+        <span class="feat-tag">Folder Watcher</span>
+      </div>
+
+      <!-- Card 5 -->
+      <div class="feat-card reveal">
+        <div class="feat-num">05</div>
+        <div class="feat-icon-wrap">🌐</div>
+        <div class="feat-name">Version Checker</div>
+        <div class="feat-desc">
+          Live weao.gg API integration. Always know if Roblox is up to date before attaching.
+        </div>
+        <span class="feat-tag">weao.gg API</span>
+      </div>
+
+      <!-- Card 6 — wide -->
+      <div class="feat-card wide reveal">
+        <div class="feat-num">06</div>
+        <div class="feat-icon-wrap">🎨</div>
+        <div class="feat-name">Ultra Modern UI</div>
+        <div class="feat-desc">
+          Full pitch-black theme. Animated sidebar navigation. Smooth toast notifications. Glowing accent borders. Resize + drag window. Every pixel designed intentionally — this isn't your average executor GUI.
+        </div>
+        <span class="feat-tag">Custom WinForms Renderer</span>
+      </div>
+
     </div>
   </div>
-</section>
-
-<!-- CHANGELOG -->
-<section id="changelog">
-  <div class="section-tag">Changelog</div>
-  <h2 class="section-title reveal">RELEASE<br><span>HISTORY</span></h2>
-  <div class="cl-list reveal" id="cl-list">
-
-    <div class="cl-entry open">
-      <div class="cl-header" onclick="toggleCL(this)">
-        <div class="cl-left">
-          <div class="cl-ver">v8.0</div>
-          <span class="cl-tag latest">Latest</span>
-          <span class="cl-date">Mar 2025</span>
-        </div>
-        <span class="cl-chevron">▼</span>
-      </div>
-      <div class="cl-body">
-        <div class="cl-inner">
-          <div class="cl-changes">
-            <div class="cl-change"><span class="tag add">ADD</span><span>Complete UI overhaul — full black theme, glowing accent palette</span></div>
-            <div class="cl-change"><span class="tag add">ADD</span><span>Nova branding — sidebar N logo with glow, updated title bar</span></div>
-            <div class="cl-change"><span class="tag add">ADD</span><span>ScriptBlox Hub improvements — larger cards, better image handling</span></div>
-            <div class="cl-change"><span class="tag imp">IMP</span><span>Stronger accent colors (violet/purple), more vivid border glow on hover</span></div>
-            <div class="cl-change"><span class="tag imp">IMP</span><span>PillBtn corner radius increased for more modern feel</span></div>
-            <div class="cl-change"><span class="tag fix">FIX</span><span>Autoexec folder path updated to match new branding</span></div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="cl-entry">
-      <div class="cl-header" onclick="toggleCL(this)">
-        <div class="cl-left">
-          <div class="cl-ver">v7.0</div>
-          <span class="cl-tag stable">Stable</span>
-          <span class="cl-date">Jan 2025</span>
-        </div>
-        <span class="cl-chevron">▼</span>
-      </div>
-      <div class="cl-body">
-        <div class="cl-inner">
-          <div class="cl-changes">
-            <div class="cl-change"><span class="tag add">ADD</span><span>Script Hub with ScriptBlox integration — Trending & Latest tabs</span></div>
-            <div class="cl-change"><span class="tag add">ADD</span><span>Tab system — multiple scripts open at once with close/add buttons</span></div>
-            <div class="cl-change"><span class="tag add">ADD</span><span>Toast notification system with animated fade in/out</span></div>
-            <div class="cl-change"><span class="tag imp">IMP</span><span>weao.gg version checker with local Roblox detection</span></div>
-            <div class="cl-change"><span class="tag fix">FIX</span><span>Resize grip stability in borderless window mode</span></div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="cl-entry">
-      <div class="cl-header" onclick="toggleCL(this)">
-        <div class="cl-left">
-          <div class="cl-ver">v6.0</div>
-          <span class="cl-tag old">Old</span>
-          <span class="cl-date">Oct 2024</span>
-        </div>
-        <span class="cl-chevron">▼</span>
-      </div>
-      <div class="cl-body">
-        <div class="cl-inner">
-          <div class="cl-changes">
-            <div class="cl-change"><span class="tag add">ADD</span><span>Auto Executor — folder watcher runs scripts on inject</span></div>
-            <div class="cl-change"><span class="tag add">ADD</span><span>Settings page with animated toggle switches</span></div>
-            <div class="cl-change"><span class="tag imp">IMP</span><span>Sidebar navigation with animated active indicator</span></div>
-            <div class="cl-change"><span class="tag fix">FIX</span><span>Fixed drag behavior when maximized</span></div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="cl-entry">
-      <div class="cl-header" onclick="toggleCL(this)">
-        <div class="cl-left">
-          <div class="cl-ver">v5.0</div>
-          <span class="cl-tag old">Old</span>
-          <span class="cl-date">Jul 2024</span>
-        </div>
-        <span class="cl-chevron">▼</span>
-      </div>
-      <div class="cl-body">
-        <div class="cl-inner">
-          <div class="cl-changes">
-            <div class="cl-change"><span class="tag add">ADD</span><span>Maximize/restore window support with double-click title bar</span></div>
-            <div class="cl-change"><span class="tag add">ADD</span><span>Resize grip in bottom-right corner</span></div>
-            <div class="cl-change"><span class="tag imp">IMP</span><span>Custom borderless window chrome with gradient top line</span></div>
-            <div class="cl-change"><span class="tag rem">REM</span><span>Removed legacy injection method (replaced with VelocityAPI v2)</span></div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-  </div>
-</section>
-
-<!-- DOWNLOAD -->
-<section id="download">
-  <div class="dl-glow"></div>
-  <div class="section-tag" style="justify-content:center">Download</div>
-  <h2 class="dl-title reveal">GET <span>NOVA</span><br>FOR FREE</h2>
-  <p class="dl-sub reveal">No key system. No ads. No nonsense.</p>
-  <div class="dl-actions reveal">
-    <a href="https://github.com/" class="btn-primary" target="_blank"><span>↓</span><span>Download v8</span></a>
-    <a href="https://github.com/" class="btn-ghost" target="_blank">★ GitHub</a>
-  </div>
-  <p style="margin-top:32px; font-family:'Space Mono',monospace; font-size:10px; color:var(--muted); letter-spacing:1px;">
-    WINDOWS 10/11 · .NET 8 REQUIRED · ANTIVIRUS WHITELIST RECOMMENDED
-  </p>
 </section>
 
 <!-- TICKER 2 -->
 <div class="ticker-wrap">
-  <div class="ticker">
-    <div class="ticker-item"><span class="sep">✦</span> Free Forever <span class="sep">✦</span> No Key System <span class="sep">✦</span> No Ads <span class="sep">✦</span> Open Source <span class="sep">✦</span> Community Driven <span class="sep">✦</span> VelocityAPI Powered <span class="sep">✦</span> weao.gg Integrated <span class="sep">✦</span> ScriptBlox Hub</div>
-    <div class="ticker-item"><span class="sep">✦</span> Free Forever <span class="sep">✦</span> No Key System <span class="sep">✦</span> No Ads <span class="sep">✦</span> Open Source <span class="sep">✦</span> Community Driven <span class="sep">✦</span> VelocityAPI Powered <span class="sep">✦</span> weao.gg Integrated <span class="sep">✦</span> ScriptBlox Hub</div>
+  <div class="ticker-track" style="animation-direction: reverse; animation-duration: 22s;">
+    <div class="ticker-item"><span class="s">✦</span> No Ads <span class="s">✦</span> No Key <span class="s">✦</span> No Paywalls <span class="s">✦</span> Open GitHub <span class="s">✦</span> Community Driven <span class="s">✦</span> Regular Updates <span class="s">✦</span> Windows 10/11 <span class="s">✦</span> .NET 8 <span class="s">✦</span> Auto Updater <span class="s">✦</span> Desktop Shortcut <span class="s">✦</span> Defender Whitelist</div>
+    <div class="ticker-item"><span class="s">✦</span> No Ads <span class="s">✦</span> No Key <span class="s">✦</span> No Paywalls <span class="s">✦</span> Open GitHub <span class="s">✦</span> Community Driven <span class="s">✦</span> Regular Updates <span class="s">✦</span> Windows 10/11 <span class="s">✦</span> .NET 8 <span class="s">✦</span> Auto Updater <span class="s">✦</span> Desktop Shortcut <span class="s">✦</span> Defender Whitelist</div>
   </div>
 </div>
 
-<!-- FOOTER -->
-<footer>
-  <div>NOVA EXECUTOR © 2025 · v8.0</div>
-  <div style="display:flex;gap:24px;">
-    <a href="https://github.com/" target="_blank">GitHub</a>
-    <a href="#changelog">Changelog</a>
-    <a href="https://discord.gg/" target="_blank">Discord</a>
+<!-- ═══════════════════════════════════════
+     VERSION CHECK
+═══════════════════════════════════════ -->
+<section id="version" style="padding: 120px 0 60px;">
+  <div style="max-width:1300px; margin:0 auto; padding:0 56px;">
+    <div class="section-eyebrow reveal">Roblox Status</div>
+    <h2 style="font-family:'Syne',sans-serif; font-size:clamp(40px,5vw,72px); font-weight:800; letter-spacing:-1px; line-height:.95; margin-bottom:48px;" class="reveal">
+      VERSION<br><span style="color:var(--acc)">CHECKER</span>
+    </h2>
+
+    <div class="ver-grid reveal">
+      <div class="ver-left">
+        <div class="ver-label">Latest Roblox Version — weao.gg</div>
+        <div class="ver-number" id="weao-ver-num">—</div>
+        <div class="ver-date" id="weao-ver-date">Checking weao.gg...</div>
+        <div id="ver-status-pill" class="ver-pill warn">
+          <span class="pd"></span> Checking...
+        </div>
+      </div>
+      <div class="ver-right">
+        <div class="ver-info-row">
+          <div class="vir-label">Executor Version</div>
+          <div class="vir-val">Nova Executor v8.0</div>
+        </div>
+        <div class="ver-info-row">
+          <div class="vir-label">Roblox Version (Local)</div>
+          <div class="vir-val" id="local-ver-val">Not detected</div>
+        </div>
+        <div class="ver-info-row">
+          <div class="vir-label">API Source</div>
+          <div class="vir-val">weao.gg / windows</div>
+        </div>
+        <button class="ver-refresh-btn" id="ver-refresh">
+          <span class="spin-icon">↻</span> Refresh Version
+        </button>
+      </div>
+    </div>
   </div>
+</section>
+
+<!-- ═══════════════════════════════════════
+     CHANGELOG
+═══════════════════════════════════════ -->
+<section id="changelog">
+  <div class="cl-header-row reveal">
+    <div>
+      <div class="section-eyebrow">Changelog</div>
+      <h2 class="cl-title">RELEASE<br><span>HISTORY</span></h2>
+    </div>
+    <a href="https://github.com/yavuz16821/novaexecutora" target="_blank" rel="noopener" class="btn-outline" style="margin-bottom:8px;">View on GitHub ↗</a>
+  </div>
+
+  <div class="cl-list reveal">
+
+    <!-- v8.0 -->
+    <div class="cl-entry open">
+      <div class="cl-head">
+        <div class="cl-left">
+          <div class="cl-ver">v8.0</div>
+          <span class="cl-chip latest">Latest</span>
+          <span class="cl-date">Mar 2025</span>
+        </div>
+        <span class="cl-chev">▼</span>
+      </div>
+      <div class="cl-body">
+        <div class="cl-inner">
+          <div class="cl-changes">
+            <div class="cl-change"><span class="ctag add">ADD</span><span>Complete UI rewrite — full pitch-black theme (#000000 base), Nova branding</span></div>
+            <div class="cl-change"><span class="ctag add">ADD</span><span>Glowing "N" logo in sidebar with animated purple gradient</span></div>
+            <div class="cl-change"><span class="ctag add">ADD</span><span>Script Hub overhaul — bigger cards (96px), better image rendering, game thumbnails</span></div>
+            <div class="cl-change"><span class="ctag add">ADD</span><span>Python bootstrapper installer with animated tkinter GUI, particle effects, auto-updater</span></div>
+            <div class="cl-change"><span class="ctag imp">IMP</span><span>More vivid accent palette — violet/purple (#6E50FF → #A05AFF) with stronger glow</span></div>
+            <div class="cl-change"><span class="ctag imp">IMP</span><span>PillBtn rounder corners, sharper hover glow, improved gradient rendering</span></div>
+            <div class="cl-change"><span class="ctag imp">IMP</span><span>Hub search bar enlarged, sub-label added, status footer updated</span></div>
+            <div class="cl-change"><span class="ctag fix">FIX</span><span>Autoexec folder path renamed to match Nova branding</span></div>
+            <div class="cl-change"><span class="ctag fix">FIX</span><span>v7 tag corrected to v8 in sidebar version label</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- v7.0 -->
+    <div class="cl-entry">
+      <div class="cl-head">
+        <div class="cl-left">
+          <div class="cl-ver">v7.0</div>
+          <span class="cl-chip stable">Stable</span>
+          <span class="cl-date">Jan 2025</span>
+        </div>
+        <span class="cl-chev">▼</span>
+      </div>
+      <div class="cl-body">
+        <div class="cl-inner">
+          <div class="cl-changes">
+            <div class="cl-change"><span class="ctag add">ADD</span><span>Script Hub with live ScriptBlox.com API — Trending & Latest tabs</span></div>
+            <div class="cl-change"><span class="ctag add">ADD</span><span>Multi-tab system — open multiple scripts with close/add buttons</span></div>
+            <div class="cl-change"><span class="ctag add">ADD</span><span>Animated toast notification system (fade in/out, colored variants)</span></div>
+            <div class="cl-change"><span class="ctag add">ADD</span><span>weao.gg version check — compares local Roblox build against live API</span></div>
+            <div class="cl-change"><span class="ctag imp">IMP</span><span>Sidebar redesigned with smoother NavBtn animations</span></div>
+            <div class="cl-change"><span class="ctag fix">FIX</span><span>Resize grip stability in borderless window mode</span></div>
+            <div class="cl-change"><span class="ctag fix">FIX</span><span>ScriptCard image loading race condition resolved</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- v6.0 -->
+    <div class="cl-entry">
+      <div class="cl-head">
+        <div class="cl-left">
+          <div class="cl-ver">v6.0</div>
+          <span class="cl-chip old">Old</span>
+          <span class="cl-date">Oct 2024</span>
+        </div>
+        <span class="cl-chev">▼</span>
+      </div>
+      <div class="cl-body">
+        <div class="cl-inner">
+          <div class="cl-changes">
+            <div class="cl-change"><span class="ctag add">ADD</span><span>Auto Executor — folder watcher, scripts run automatically on every inject</span></div>
+            <div class="cl-change"><span class="ctag add">ADD</span><span>Settings page with animated toggle switches</span></div>
+            <div class="cl-change"><span class="ctag imp">IMP</span><span>Sidebar navigation with animated active indicator and hover states</span></div>
+            <div class="cl-change"><span class="ctag fix">FIX</span><span>Window drag behavior while maximized</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- v5.0 -->
+    <div class="cl-entry">
+      <div class="cl-head">
+        <div class="cl-left">
+          <div class="cl-ver">v5.0</div>
+          <span class="cl-chip old">Old</span>
+          <span class="cl-date">Jul 2024</span>
+        </div>
+        <span class="cl-chev">▼</span>
+      </div>
+      <div class="cl-body">
+        <div class="cl-inner">
+          <div class="cl-changes">
+            <div class="cl-change"><span class="ctag add">ADD</span><span>Maximize/restore support — double-click title bar</span></div>
+            <div class="cl-change"><span class="ctag add">ADD</span><span>Custom resize grip in bottom-right corner</span></div>
+            <div class="cl-change"><span class="ctag imp">IMP</span><span>Chrome painting with gradient top accent line</span></div>
+            <div class="cl-change"><span class="ctag rem">REM</span><span>Legacy injection method removed — replaced with VelocityAPI v2</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════
+     YOUTUBE
+═══════════════════════════════════════ -->
+<section id="yt-section">
+  <div class="yt-card reveal">
+    <div class="yt-icon">
+      <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.5 12 3.5 12 3.5s-7.5 0-9.4.6A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.6 9.4.6 9.4.6s7.5 0 9.4-.6a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8zM9.75 15.5V8.5l6.25 3.5-6.25 3.5z"/></svg>
+    </div>
+    <div class="yt-text">
+      <div class="yt-label">YouTube Channel</div>
+      <div class="yt-title">Lmaosbros</div>
+      <div class="yt-desc">Scripts, tutorials, executor updates and more. Subscribe to stay up to date with Nova Executor releases and new features.</div>
+    </div>
+    <a href="https://www.youtube.com/@Lmaosbros" target="_blank" rel="noopener" class="btn-yt">
+      <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.5 12 3.5 12 3.5s-7.5 0-9.4.6A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.6 9.4.6 9.4.6s7.5 0 9.4-.6a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8zM9.75 15.5V8.5l6.25 3.5-6.25 3.5z"/></svg>
+      Subscribe
+    </a>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════
+     DOWNLOAD CTA
+═══════════════════════════════════════ -->
+<section id="download">
+  <div class="dl-glow"></div>
+  <div class="dl-corner-tl"></div>
+  <div class="dl-corner-br"></div>
+
+  <div class="section-eyebrow reveal" style="justify-content:center;">Download</div>
+  <h2 class="dl-big reveal">
+    GET <span>NOVA</span><br>FOR FREE
+  </h2>
+  <p class="dl-sub reveal">No key system. No ads. No nonsense.<br>Just download and run.</p>
+  <div class="dl-actions reveal">
+    <a href="https://github.com/yavuz16821/novaexecutora/raw/refs/heads/main/Bootstrapper.exe"
+       class="btn-dl">
+      <span class="btn-icon">↓</span>
+      <span>Download Bootstrapper</span>
+    </a>
+    <a href="https://github.com/yavuz16821/novaexecutora" target="_blank" rel="noopener" class="btn-outline">★ GitHub Repo</a>
+    <a href="https://www.youtube.com/@Lmaosbros" target="_blank" rel="noopener" class="btn-outline">▶ YouTube</a>
+  </div>
+  <div class="dl-note reveal">
+    REQUIRES: <span>WINDOWS 10/11</span> · <span>.NET 8</span> · <span>ROBLOX INSTALLED</span><br>
+    Whitelist in antivirus before running.
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════
+     FOOTER
+═══════════════════════════════════════ -->
+<footer>
+  <div class="foot-left">
+    <div class="foot-n">N</div>
+    <div>
+      <div class="foot-name">NOVA EXECUTOR</div>
+      <div class="foot-copy">© 2025 · v8.0 · Free Forever</div>
+    </div>
+  </div>
+  <ul class="foot-links">
+    <li><a href="https://github.com/yavuz16821/novaexecutora" target="_blank">GitHub</a></li>
+    <li><a href="#changelog">Changelog</a></li>
+    <li><a href="https://www.youtube.com/@Lmaosbros" target="_blank">YouTube</a></li>
+    <li><a href="#download">Download</a></li>
+  </ul>
 </footer>
 
-<script>
-  // ── CURSOR ──
-  const cur = document.getElementById('cursor');
-  const ring = document.getElementById('cursor-ring');
-  let mx=0,my=0,rx=0,ry=0;
-  document.addEventListener('mousemove', e=>{
-    mx=e.clientX; my=e.clientY;
-    cur.style.left=mx+'px'; cur.style.top=my+'px';
-  });
-  (function animRing(){
-    rx+=(mx-rx)*0.12; ry+=(my-ry)*0.12;
-    ring.style.left=rx+'px'; ring.style.top=ry+'px';
-    requestAnimationFrame(animRing);
-  })();
-  document.querySelectorAll('a,button,.cl-header,.feat-card,.stat').forEach(el=>{
-    el.addEventListener('mouseenter',()=>{ cur.style.width='18px'; cur.style.height='18px'; cur.style.background='var(--accentH)'; ring.style.opacity='0.5'; });
-    el.addEventListener('mouseleave',()=>{ cur.style.width='10px'; cur.style.height='10px'; cur.style.background='var(--accent)'; ring.style.opacity='1'; });
-  });
-
-  // ── CHANGELOG TOGGLE ──
-  function toggleCL(header) {
-    const entry = header.parentElement;
-    entry.classList.toggle('open');
-  }
-
-  // ── NAV ACTIVE ──
-  function setActive(el) {
-    document.querySelectorAll('.nav-links a').forEach(a=>a.classList.remove('active'));
-    el.classList.add('active');
-  }
-
-  // ── SCROLL REVEAL ──
-  const obs = new IntersectionObserver((entries)=>{
-    entries.forEach(e=>{ if(e.isIntersecting) e.target.classList.add('visible'); });
-  }, {threshold:0.1});
-  document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
-
-  // ── WEAO VERSION CHECK ──
-  async function fetchWeao() {
-    const btn = document.getElementById('refreshBtn');
-    btn.classList.add('spinning');
-    const statusEl = document.getElementById('ver-status');
-    const verEl = document.getElementById('weao-ver');
-    const dateEl = document.getElementById('weao-date');
-    const badgeEl = document.getElementById('hero-ver-badge');
-
-    try {
-      const res = await fetch('https://weao.xyz/api/versions/current', {
-        headers: { 'User-Agent': 'WEAO-3PService' }
-      });
-      const data = await res.json();
-      const ver  = data.Windows || '—';
-      const date = data.WindowsDate || '';
-      let dateStr = date;
-      try { dateStr = new Date(date).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'}); } catch(e){}
-
-      verEl.textContent  = ver || '—';
-      dateEl.textContent = 'Released: ' + (dateStr || 'Unknown');
-      badgeEl.textContent = 'v8.0 — NOW AVAILABLE  ·  Roblox ' + (ver ? ver.slice(0,16) : '');
-
-      // Check if executor is up to date (simple check)
-      statusEl.className = 'ver-status ok';
-      statusEl.innerHTML = '<div class="ver-dot ok"></div><span>Roblox Up to Date</span>';
-
-    } catch(err) {
-      verEl.textContent  = 'Error';
-      dateEl.textContent = 'Could not reach weao.gg';
-      statusEl.className = 'ver-status err';
-      statusEl.innerHTML = '<div class="ver-dot err"></div><span>Connection Failed</span>';
-      badgeEl.textContent = 'v8.0 — NOW AVAILABLE';
-    }
-    btn.classList.remove('spinning');
-  }
-
-  // Auto fetch on load
-  fetchWeao();
-
-  // ── SMOOTH NAV HIGHLIGHT ON SCROLL ──
-  const sections = ['home','features','versions','changelog','download'];
-  window.addEventListener('scroll', ()=>{
-    let cur2 = 'home';
-    sections.forEach(id=>{
-      const el = document.getElementById(id);
-      if(el && el.getBoundingClientRect().top <= 100) cur2 = id;
-    });
-    document.querySelectorAll('.nav-links a').forEach(a=>{
-      a.classList.toggle('active', a.getAttribute('href')==='#'+cur2);
-    });
-  });
-</script>
+<script src="js/main.js"></script>
 </body>
 </html>
