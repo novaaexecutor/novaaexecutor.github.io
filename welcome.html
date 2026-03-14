@@ -11,119 +11,206 @@ html,body{width:100%;height:100%;overflow:hidden;background:#000;font-family:'Sy
 :root{--acc:#6e50ff;--acch:#a05aff;--accy:#c8ff00}
 
 #cd{position:fixed;width:8px;height:8px;background:var(--acc);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);mix-blend-mode:screen;transition:width .15s,height .15s,background .15s}
-#cr{position:fixed;width:30px;height:30px;border:1.5px solid rgba(110,80,255,.5);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%)}
-
+#cr{position:fixed;width:32px;height:32px;border:1.5px solid rgba(110,80,255,.4);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%)}
 canvas{position:fixed;inset:0;width:100%;height:100%;z-index:0}
 
-.wrap{position:fixed;inset:0;z-index:10;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0}
+/* WRAP */
+.wrap{position:fixed;inset:0;z-index:10;display:flex;flex-direction:column;align-items:center;justify-content:center}
 
+/* LOGO */
+.logo-outer{position:relative;width:110px;height:110px;display:flex;align-items:center;justify-content:center}
+.logo-ring{position:absolute;inset:-4px;border-radius:32px;background:conic-gradient(from 0deg,var(--acc),var(--acch),var(--accy),var(--acc));animation:spinRing 3s linear infinite;z-index:0}
+.logo-ring-inner{position:absolute;inset:-1px;border-radius:30px;background:#000;z-index:1}
 .logo-box{
-  width:100px;height:100px;border-radius:26px;
+  position:relative;z-index:2;
+  width:110px;height:110px;border-radius:28px;
   background:linear-gradient(135deg,var(--acc),var(--acch));
   display:flex;align-items:center;justify-content:center;
-  font-size:56px;font-weight:800;color:#fff;
-  box-shadow:0 0 80px rgba(110,80,255,.7),0 0 160px rgba(110,80,255,.25);
-  animation:popIn .8s cubic-bezier(.22,1,.36,1) both, pulse 3s 1s ease-in-out infinite;
-  position:relative;
+  font-size:62px;font-weight:800;color:#fff;
+  box-shadow:0 0 80px rgba(110,80,255,.65),0 0 160px rgba(110,80,255,.2);
+  animation:popIn .9s cubic-bezier(.22,1,.36,1) both, glowPulse 3s 1s ease-in-out infinite;
 }
-.logo-box::before{
-  content:'';position:absolute;inset:-3px;border-radius:29px;z-index:-1;
-  background:conic-gradient(from 0deg,var(--acc),var(--acch),var(--accy),var(--acc));
-  animation:spinRing 4s linear infinite;
-}
-.logo-box::after{
-  content:'';position:absolute;inset:0;border-radius:26px;
-  background:linear-gradient(135deg,var(--acc),var(--acch));z-index:0;
-}
-.logo-box span{position:relative;z-index:1}
 
+/* TITLE */
 .title{
-  margin-top:28px;font-size:clamp(42px,6vw,72px);font-weight:800;
-  letter-spacing:-1px;color:#eeeeff;text-align:center;line-height:1;
+  margin-top:32px;
+  font-size:clamp(44px,7vw,76px);font-weight:800;
+  letter-spacing:-1.5px;color:#eeeeff;text-align:center;line-height:1;
   animation:fadeUp .8s .15s cubic-bezier(.22,1,.36,1) both;
 }
 .subtitle{
-  margin-top:10px;font-family:'Space Mono',monospace;font-size:10px;
-  letter-spacing:5px;color:var(--acc);text-transform:uppercase;text-align:center;
+  margin-top:12px;
+  font-family:'Space Mono',monospace;font-size:10px;
+  letter-spacing:6px;color:var(--acc);text-transform:uppercase;text-align:center;
   animation:fadeUp .8s .25s cubic-bezier(.22,1,.36,1) both;
 }
 
-.bar-wrap{
-  margin-top:56px;width:260px;
-  animation:fadeUp .8s .35s cubic-bezier(.22,1,.36,1) both;
+/* CHIPS */
+.chips{
+  margin-top:24px;display:flex;gap:10px;flex-wrap:wrap;justify-content:center;
+  animation:fadeUp .8s .32s cubic-bezier(.22,1,.36,1) both;
 }
-.bar-track{height:3px;background:rgba(110,80,255,.15);border-radius:2px;overflow:visible;position:relative}
-.bar-fill{height:100%;background:linear-gradient(90deg,var(--acc),var(--acch));border-radius:2px;width:0%;transition:width .5s ease;position:relative}
-.bar-fill::after{content:'';position:absolute;right:-4px;top:-3px;width:9px;height:9px;border-radius:50%;background:var(--acch);box-shadow:0 0 12px var(--acch),0 0 24px rgba(160,90,255,.5)}
-.bar-status{margin-top:14px;text-align:center;font-family:'Space Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:rgba(110,80,255,.5)}
+.chip{
+  padding:5px 14px;border-radius:100px;
+  font-family:'Space Mono',monospace;font-size:9px;letter-spacing:1.5px;
+  text-transform:uppercase;border:1px solid;
+}
+.chip.a{background:rgba(110,80,255,.1);color:var(--acc);border-color:rgba(110,80,255,.3)}
+.chip.b{background:rgba(0,232,122,.08);color:#00e87a;border-color:rgba(0,232,122,.25)}
+.chip.c{background:rgba(200,255,0,.07);color:var(--accy);border-color:rgba(200,255,0,.25)}
 
+/* LOADING BAR */
+.bar-wrap{
+  margin-top:52px;width:280px;
+  animation:fadeUp .8s .38s cubic-bezier(.22,1,.36,1) both;
+}
+.bar-track{
+  height:3px;background:rgba(110,80,255,.12);
+  border-radius:2px;overflow:visible;position:relative;
+}
+.bar-fill{
+  height:100%;
+  background:linear-gradient(90deg,var(--acc),var(--acch));
+  border-radius:2px;width:0%;transition:width .55s cubic-bezier(.4,0,.2,1);
+  position:relative;
+}
+.bar-fill::after{
+  content:'';position:absolute;right:-5px;top:-4px;
+  width:11px;height:11px;border-radius:50%;
+  background:var(--acch);
+  box-shadow:0 0 14px var(--acch),0 0 28px rgba(160,90,255,.6);
+  transition:opacity .3s;
+}
+.bar-status{
+  margin-top:14px;text-align:center;
+  font-family:'Space Mono',monospace;font-size:9px;
+  letter-spacing:2px;text-transform:uppercase;
+  color:rgba(110,80,255,.45);
+  transition:color .3s;
+}
+
+/* ENTER BUTTON */
 .enter-btn{
-  margin-top:52px;
+  margin-top:48px;
   display:inline-flex;align-items:center;gap:12px;
-  padding:16px 44px;border-radius:14px;
+  padding:16px 48px;border-radius:14px;
   background:linear-gradient(135deg,var(--acc),var(--acch));
-  color:#fff;font-family:'Syne',sans-serif;font-size:15px;font-weight:700;
+  color:#fff;font-family:'Syne',sans-serif;
+  font-size:15px;font-weight:800;
   text-decoration:none;cursor:none;
-  box-shadow:0 0 60px rgba(110,80,255,.5),inset 0 1px 0 rgba(255,255,255,.2);
-  opacity:0;transform:translateY(20px);
+  box-shadow:0 0 60px rgba(110,80,255,.5),inset 0 1px 0 rgba(255,255,255,.18);
+  opacity:0;transform:translateY(22px) scale(.97);
   transition:opacity .5s,transform .5s,box-shadow .2s;
-  pointer-events:none;
+  pointer-events:none;letter-spacing:.5px;
 }
 .enter-btn.show{opacity:1;transform:none;pointer-events:auto}
-.enter-btn:hover{box-shadow:0 0 90px rgba(110,80,255,.8),inset 0 1px 0 rgba(255,255,255,.2)}
+.enter-btn:hover{box-shadow:0 0 100px rgba(110,80,255,.85),inset 0 1px 0 rgba(255,255,255,.18);transform:translateY(-2px)}
+.enter-btn .arr{transition:transform .2s}
+.enter-btn:hover .arr{transform:translateX(4px)}
 
-.ver{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);font-family:'Space Mono',monospace;font-size:9px;letter-spacing:2px;color:rgba(110,80,255,.25);text-transform:uppercase;z-index:11}
+/* CORNER DECO */
+.c-tl,.c-br{position:fixed;width:100px;height:100px;pointer-events:none;z-index:5}
+.c-tl{top:32px;left:32px;border-top:1px solid rgba(110,80,255,.2);border-left:1px solid rgba(110,80,255,.2)}
+.c-br{bottom:32px;right:32px;border-bottom:1px solid rgba(110,80,255,.2);border-right:1px solid rgba(110,80,255,.2)}
 
-@keyframes popIn{from{opacity:0;transform:scale(.6)}to{opacity:1;transform:scale(1)}}
-@keyframes pulse{0%,100%{box-shadow:0 0 80px rgba(110,80,255,.7),0 0 160px rgba(110,80,255,.25)}50%{box-shadow:0 0 100px rgba(160,90,255,.9),0 0 200px rgba(110,80,255,.35)}}
+/* VERSION */
+.ver{
+  position:fixed;bottom:18px;left:50%;transform:translateX(-50%);
+  font-family:'Space Mono',monospace;font-size:9px;
+  letter-spacing:2px;color:rgba(110,80,255,.22);
+  text-transform:uppercase;z-index:11;white-space:nowrap;
+}
+
+@keyframes popIn{from{opacity:0;transform:scale(.55)}to{opacity:1;transform:scale(1)}}
+@keyframes glowPulse{0%,100%{box-shadow:0 0 80px rgba(110,80,255,.65),0 0 160px rgba(110,80,255,.2)}50%{box-shadow:0 0 110px rgba(160,90,255,.9),0 0 220px rgba(110,80,255,.35)}}
 @keyframes spinRing{to{transform:rotate(360deg)}}
-@keyframes fadeUp{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:none}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:none}}
 </style>
 </head>
 <body>
 <div id="cd"></div>
 <div id="cr"></div>
 <canvas id="cv"></canvas>
+<div class="c-tl"></div>
+<div class="c-br"></div>
 
 <div class="wrap">
-  <div class="logo-box"><span>N</span></div>
+  <div class="logo-outer">
+    <div class="logo-ring"></div>
+    <div class="logo-ring-inner"></div>
+    <div class="logo-box">N</div>
+  </div>
+
   <div class="title">NOVA EXECUTOR</div>
-  <div class="subtitle">Free · Fast · No Key System</div>
+  <div class="subtitle">Free &nbsp;·&nbsp; Fast &nbsp;·&nbsp; No Key</div>
+
+  <div class="chips">
+    <span class="chip a">v8.0 Latest</span>
+    <span class="chip b">Free Forever</span>
+    <span class="chip c">No Key System</span>
+  </div>
+
   <div class="bar-wrap">
     <div class="bar-track"><div class="bar-fill" id="bar"></div></div>
     <div class="bar-status" id="stxt">Initializing...</div>
   </div>
-  <a href="index.html" class="enter-btn" id="ebtn">Enter Site <span>→</span></a>
+
+  <a href="index.html" class="enter-btn" id="ebtn">
+    Enter Site <span class="arr">→</span>
+  </a>
 </div>
-<div class="ver">Nova Executor · v8.0 · Free Forever</div>
+
+<div class="ver">Nova Executor &nbsp;·&nbsp; v8.0 &nbsp;·&nbsp; Free Forever</div>
 
 <script>
-// cursor
+// ── CURSOR
 const cd=document.getElementById('cd'),cr=document.getElementById('cr');
 let mx=0,my=0,rx=0,ry=0;
 document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;cd.style.left=mx+'px';cd.style.top=my+'px'});
 (function a(){rx+=(mx-rx)*.1;ry+=(my-ry)*.1;cr.style.left=rx+'px';cr.style.top=ry+'px';requestAnimationFrame(a)})();
 document.querySelectorAll('a').forEach(el=>{
-  el.addEventListener('mouseenter',()=>{cd.style.width='16px';cd.style.height='16px';cd.style.background='#a05aff'});
+  el.addEventListener('mouseenter',()=>{cd.style.width='18px';cd.style.height='18px';cd.style.background='#a05aff'});
   el.addEventListener('mouseleave',()=>{cd.style.width='8px';cd.style.height='8px';cd.style.background='#6e50ff'});
 });
 
-// canvas bg
+// ── CANVAS
 const c=document.getElementById('cv'),ctx=c.getContext('2d');
 function rsz(){c.width=innerWidth;c.height=innerHeight}rsz();
 window.addEventListener('resize',rsz);
-const ps=Array.from({length:70},()=>({x:Math.random()*innerWidth,y:Math.random()*innerHeight,vy:.2+Math.random()*.5,vx:(Math.random()-.5)*.15,r:.5+Math.random()*1.8,l:Math.random(),m:0}));
+let mouseX=innerWidth/2,mouseY=innerHeight/2;
+document.addEventListener('mousemove',e=>{mouseX=e.clientX;mouseY=e.clientY});
+
+const ps=Array.from({length:75},()=>({
+  x:Math.random()*innerWidth,y:Math.random()*innerHeight,
+  vy:.15+Math.random()*.45,vx:(Math.random()-.5)*.12,
+  r:.4+Math.random()*1.6,l:Math.random(),m:0
+}));
 ps.forEach(p=>p.m=p.l);
+
 function drw(){
   ctx.clearRect(0,0,c.width,c.height);
-  ctx.strokeStyle='rgba(110,80,255,0.055)';ctx.lineWidth=1;
-  for(let x=0;x<c.width;x+=80){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,c.height);ctx.stroke()}
-  for(let y=0;y<c.height;y+=80){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(c.width,y);ctx.stroke()}
+
+  // grid with mouse proximity
+  const cw=80,ch=80;
+  for(let r=0;r<Math.ceil(c.height/ch)+1;r++){
+    for(let cc=0;cc<Math.ceil(c.width/cw)+1;cc++){
+      const cx2=cc*cw,cy2=r*ch;
+      const d=Math.hypot(cx2+cw/2-mouseX,cy2+ch/2-mouseY);
+      const p=Math.max(0,1-d/320);
+      ctx.strokeStyle=`rgba(110,80,255,${.05+p*.3})`;
+      ctx.lineWidth=1;ctx.strokeRect(cx2+.5,cy2+.5,cw,ch);
+      if(p>.04){ctx.fillStyle=`rgba(110,80,255,${p*.09})`;ctx.fillRect(cx2+1,cy2+1,cw-2,ch-2)}
+    }
+  }
+
+  // radial glow
   const g=ctx.createRadialGradient(c.width/2,c.height/2,0,c.width/2,c.height/2,c.width*.55);
-  g.addColorStop(0,'rgba(110,80,255,0.09)');g.addColorStop(1,'transparent');
+  g.addColorStop(0,'rgba(110,80,255,0.08)');g.addColorStop(1,'transparent');
   ctx.fillStyle=g;ctx.fillRect(0,0,c.width,c.height);
+
+  // particles
   for(const p of ps){
-    p.y-=p.vy;p.x+=p.vx;p.l-=.002;
+    p.y-=p.vy;p.x+=p.vx;p.l-=.0018;
     if(p.l<=0||p.y<-4){p.x=Math.random()*c.width;p.y=c.height+4;p.l=Math.random();p.m=p.l}
     const a=Math.pow(p.l/p.m,1.4)*.5;
     ctx.globalAlpha=a;ctx.fillStyle='#a05aff';
@@ -133,17 +220,30 @@ function drw(){
 }
 drw();
 
-// loading bar
+// ── LOADING BAR
 const bar=document.getElementById('bar'),stxt=document.getElementById('stxt'),ebtn=document.getElementById('ebtn');
-const steps=[{p:12,t:'Initializing...'},{p:30,t:'Loading assets...'},{p:55,t:'Checking version...'},{p:78,t:'Almost ready...'},{p:100,t:'Ready!'}];
+const steps=[
+  {p:8,  t:'Initializing...'},
+  {p:22, t:'Loading assets...'},
+  {p:45, t:'Checking version...'},
+  {p:68, t:'Almost ready...'},
+  {p:88, t:'Finalizing...'},
+  {p:100,t:'Ready!'},
+];
 let si=0;
 function ns(){
   if(si>=steps.length)return;
-  const s=steps[si++];bar.style.width=s.p+'%';stxt.textContent=s.t;
-  if(s.p===100)setTimeout(()=>ebtn.classList.add('show'),500);
-  else setTimeout(ns,350+Math.random()*300);
+  const s=steps[si++];
+  bar.style.width=s.p+'%';
+  stxt.textContent=s.t;
+  if(s.p===100){
+    stxt.style.color='rgba(0,232,122,.7)';
+    setTimeout(()=>ebtn.classList.add('show'),500);
+  } else {
+    setTimeout(ns,380+Math.random()*280);
+  }
 }
-setTimeout(ns,700);
+setTimeout(ns,600);
 </script>
 </body>
 </html>
